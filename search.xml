@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>漏洞积累</title>
-    <url>/2021/03/08/%E6%BC%8F%E6%B4%9E%E7%A7%AF%E7%B4%AF/</url>
+    <title>url跳转绕过</title>
+    <url>/2021/03/12/url%E8%B7%B3%E8%BD%AC%E7%BB%95%E8%BF%87/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="ae8a284ac032498d5424d48f0499f2a8ebf3e7ae998f14147f43dfa265bbf86e">02308438db1a0ae620b71fb60cc53e94e91d7084bca10ae94004187b2ea4f94a426b312cb32f2da4bd8e1d268bd9e75ac1b28a217e8a3b45625fd9eef4e1616c7685d147f92b501342954c728d70dedfa2e96e2c288488380bdff2b82d665dba2b11a19ae5697137327186bbb3bc4af6ab8dcf171930cd7acc85b721769f1b81d81c504e06cdf4c28105a5386ac8d36175c9a507ba51eed1ecac077a84b3b77f4cec18769795ea2285c5b48bcdc4551a43c06d45cced030867c7f31435ae6442f56cbe8e3d088d701a4ac8f796009555cb8b07adee7ab0709f9cea4ff1062ca8818dfe46d6cc53201c0f2cb45e3eabd770eefc80da6283496df9887607fb14f39846fc1dde5f29e801bb9d0ccc8e3e0e4bc8aeeb2019b9fa75264405e865e55b2b5efc857e89c5613d934da9e863e840368398a4a94a9eb90fdc5cb59280ffc97110693a2f56e3ee4b101812f93ebf2dc598b1bfc2377f046057156850388b800924d725484a1f940be21ec1649755a3bd0eff265ece4a8631b46d9f41ac4b433883b77e1113507ef905caf15dbb42617df1c7ac1d64045bd282b91ee6ced06ad86dd79fdaaf197cbd15166e7aae6adf65bb5cad04c1f80952d11f734f55c287c969ebf6b3003ff0e0302b642eef914cabf10d52878b94208733932913f4bfff49a78b39b987736cda2d055643165dbe79475167f3da63c39841d7863d8051699650742d473652435e1a3edc09f2289b2f9e39da1025e716d7fb01ff56b0713eb1222f8523866f13a366ac46f8c7002dad8e554a6ebef13362032cb6c198ef55114f5dc0ce418c9eec204714ee8224bcad3e6e2b56d7a62961a4f87159350dd827e5c1ad532baa21a43bd0cf85920ffb89ee5015d88c181d5e782964b7144825e61b1e3fe2b71900d798c5cc8101674e19ec9cbd545374ad4daacb819523a3ba5c1e66b56c6aff180c9754c781287c8a432113d8ff837f603526190751bac80ba9e5460c813d474d02fe602fbc4841332dc9c6f5823eb0e320797019ae08331ef525b7db7c00b93c047f3b6ceb6fac6ad9b8c18b0c0ba49cc25648f93021c9b968ec8789fc3a9b7d8eb50e80fd5cc55fb96cc5edbabf0f6daba3e0455c20252132db0c68f5d24799549f7d2f5a77dc95c2b9464d5a034fc5ed582e164a59eb74efe677bb8aa15847a3ea70f202006f9acafefafc7e5fd6cc740f89cc85703b7b7860b1872bbebc36d355d63e7f53f7f8e076db3520bb02f3d03c6364bdb1d1653b8fe128edada9bfe43225d1ced3769961216cd0a71fca8ae52cef396e0960c929f67616471d635ed72ea207c4fb5cc713f3b0d9af287865d77e758cbdcaefb9037ad337194b29a23aa76d9f4f2dfac022c7d08c4d8b4031170da110739745ff4c968afd89b9995e39ba5c8f6fb977d621ef546e5ca2f88a2f8a060a009dde9c8964eda9153f452e07091c577037b986f1e8fc93a446a2790bdde3c6dd86d9224b5017829d311028933fe5045a44cca2b2b4f45faed1f4b67f652e48de31319b03a575724113f03786860d130e232b7265b204fc6d8228712e3485a2ec7b50c946b1e6e8ad8c7648e91c0dc911741e9c0448fc4ff6b5ccbbf30c8aeb73738365ea03be0488a8fb8eb306f7e25ba08581a94a95ea10f7a745383f5fcd12dbf95f8c7523301f66ced147924959209b329524b7527bfa0bbd1676d7a329b8806831cc54b99e62b5d5262563630ed677a9b55665babd0a3ed911bb28b8d56ebe2ea1817134214025c4199db46cabc5b77e9e79c77ea91327c5f9866b8c0b5a4b439aa665b826e61afbd1bd888ce3aa18d2cbe9e84c46edd18f8bbd0cfb52447712ea2214cd18887c8a256f24b26ab986c4d1a45a85278c37bdf684454a152adfe3b9e875aac2d661aa074139b42255cdab4eafda4738e232e51f98608b405b68c621c81717b8b29ffe0380743f86b133b85e67f98fff73d664faf2da8c805a4d463cadaae937915113f48e74ffaaa73159cf3d4fa87c93258bcf2fc6a03c2b99b73504e665f68c023817a11989c01c3edac851fcfb5acd213369ea1843afcb0e1e89a0ef2d7e59e297888dfb210879a09ef8f8f371475e3f6c14d0135ef709c7df38a45503d4329e49ab570b98d0dbd2a3a1e94c9636e391cb592d04ef9d5364cd67440f9fa7b57d0456d8107fbf368fbad96e297a29dfb8dbd9bd0b22a73fda04459add6422f8fe236361aa806a412a2733245334333439c16c50460240548539daf47284f15b50ed6af3ca516c0bffc46913abf85e55c287f52728b1b9bbca96a1e34d228be0699db3ea1cd0d099fe80dc56f5fbea00e75576ede9790df8e1f6bb880f0d7451121c51ed95bf69808754188cf3bd787f47a3b523e3548ef0c44d5505c5f5f57b88c553745c8b4e4330095ca0e44c7e5c3fe3f00965ff3cee54af690751a2523813518333a9b23ed2dbadc041a4183d18206152817150499f198f219a04e2cc5a761e8ab7763ceb74e743856e6301fa556a7a15c6cca838c6b69ab1e72b136aade17c4b2e49ae82f37e8bd4928ca0b688d419af62f4fb1fcd79fc8bdd84b66340360809a4ae22061afc73cb235616f4e29dd326dd143b6875ff18a2c9f667450113bbf3b7ae0437f17ec8304f187afeea34c8f515b71f354696057ffa556add68cf73521a52af9bd3d78ebd09366d7a434205b63f5c53e231d0522800bc42ce7e042a17e220c532240ebaae72043abd848e699604fb843b557f203850a754602b15e73032eb8c7f8f7d631dcd7f62080506b0da70614d212aa75eadb927b666d8bfd2914469486344376bf0579d4873dfdab3c57678262560403bb969f91b194fed70afdfc00570b209388b73153d8ad000dd02c357b435f0993269e43568cd87d451dd34201b925c73fe8db091d5e8b64a7258e66764e7417b5b2573756fb980ceff7577673db61b51a8d2b02d6edcdf06c26fe0fd90749fa88ba1560b0d535b1d053b068caa72392667a662e995fd214c68aa2bef1fa5b7cb5cdb75d3b3091e988bd77a101478bc9cf6013818f6928d10fc35fc542fe6d94fe15d5eaf37004ccc962006608b6651ca7f34</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>web安全</category>
+      </categories>
+      <tags>
+        <tag>实战</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>burpsuite实用插件推荐</title>
+    <url>/2021/03/11/burpsuite%E6%8F%92%E4%BB%B6%E6%8E%A8%E8%8D%90/</url>
     <content><![CDATA[<blockquote class="blockquote-center">
             <i class="fa fa-quote-left"></i>
-            <p>漏洞积累,持续更新</p>
+            <p>burpsuite实用插件推荐</p>
 
             <i class="fa fa-quote-right"></i>
           </blockquote>
 
 <span id="more"></span>
 
-<h3 id="Coremail邮件系统"><a href="#Coremail邮件系统" class="headerlink" title="Coremail邮件系统"></a>Coremail邮件系统</h3><h4 id="Coremail邮件系统配置文件信息泄露"><a href="#Coremail邮件系统配置文件信息泄露" class="headerlink" title="Coremail邮件系统配置文件信息泄露"></a>Coremail邮件系统配置文件信息泄露</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;x.x.x.x&#x2F;mailsms&#x2F;s?func&#x3D;ADMIN:appState&amp;dumpConfig&#x3D;&#x2F;</span><br></pre></td></tr></table></figure>
-
-<h3 id="通达OA"><a href="#通达OA" class="headerlink" title="通达OA"></a>通达OA</h3><h4 id="通达OA未授权访问"><a href="#通达OA未授权访问" class="headerlink" title="通达OA未授权访问"></a>通达OA未授权访问</h4><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">1.先访问http://xxx.xxx.xxx/mobile/auth_mobi.php?isAvatar=1&amp;uid=1&amp;P_VER=0，如果出现空白，说明已经获得权限；</span><br><span class="line">2.在访问http://xxx.xxx.xxx/general/ ,成功进入系统</span><br><span class="line">3.如果出现RELOGIN,则说明目前没有人在线,需要等待有人登录的时候在尝试</span><br></pre></td></tr></table></figure>
-
-<h4 id="通达OA-SQL注入"><a href="#通达OA-SQL注入" class="headerlink" title="通达OA SQL注入"></a>通达OA SQL注入</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;ispirit&#x2F;retrieve_pwd.php?_GET[username]&#x3D;vulcheck</span><br></pre></td></tr></table></figure>
-
-<h3 id="shiro框架"><a href="#shiro框架" class="headerlink" title="shiro框架"></a>shiro框架</h3><h4 id="shiro反序列化"><a href="#shiro反序列化" class="headerlink" title="shiro反序列化"></a>shiro反序列化</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">特征：cookie返回值含有：RememberMe</span><br></pre></td></tr></table></figure>
-
-<h4 id="shiro权限绕过"><a href="#shiro权限绕过" class="headerlink" title="shiro权限绕过"></a>shiro权限绕过</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.在Shiro框架的网站后面拼接&#x2F;;&#x2F;查看页面是否正常;</span><br><span class="line">2.利用fofa搜索同类网站，弱口令进后台，搜集后台接口的url，拼接url达到未授权访问目的</span><br></pre></td></tr></table></figure>
+<h3 id="reflector"><a href="#reflector" class="headerlink" title="reflector"></a>reflector</h3><p>一款自动检测xss漏洞的插件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;elkokc&#x2F;reflector</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <tags>
-        <tag>漏洞</tag>
+        <tag>burpsuite</tag>
       </tags>
   </entry>
   <entry>
