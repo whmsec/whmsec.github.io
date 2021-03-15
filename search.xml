@@ -6,15 +6,15 @@
     <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这里记录一下URL重定向绕过的方法</p>
 <span id="more"></span>
 
-<h3 id="0x02-利用问号绕过"><a href="#0x02-利用问号绕过" class="headerlink" title="0x02  利用问号绕过"></a>0x02  利用问号绕过</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.bbb.com&#x2F;xxx.php?redict&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;?www.bbb.com</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-利用问号绕过"><a href="#0x02-利用问号绕过" class="headerlink" title="0x02  利用问号绕过"></a>0x02  利用问号绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.baidu.com/?www.bbb.com</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x03-利用-绕过"><a href="#0x03-利用-绕过" class="headerlink" title="0x03  利用@绕过"></a>0x03  利用@绕过</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.bbb.com&#x2F;xxx.php?redict&#x3D;http:&#x2F;&#x2F;www.bbb.com@www.baidu.com</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-利用-绕过"><a href="#0x03-利用-绕过" class="headerlink" title="0x03  利用@绕过"></a>0x03  利用@绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.bbb.com@www.baidu.com</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x04-利用-号绕过"><a href="#0x04-利用-号绕过" class="headerlink" title="0x04  利用#号绕过"></a>0x04  利用#号绕过</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.bbb.com&#x2F;xxx.php?redict&#x3D;http:&#x2F;&#x2F;www.baidu.com#www.bbb.com</span><br></pre></td></tr></table></figure>
+<h3 id="0x04-利用-号绕过"><a href="#0x04-利用-号绕过" class="headerlink" title="0x04  利用#号绕过"></a>0x04  利用#号绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.baidu.com#www.bbb.com</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x05-利用多级域名绕过"><a href="#0x05-利用多级域名绕过" class="headerlink" title="0x05  利用多级域名绕过"></a>0x05  利用多级域名绕过</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.bbb.com&#x2F;xxx.php?redict&#x3D;http:&#x2F;&#x2F;bbb.com.baidu.com</span><br></pre></td></tr></table></figure>
+<h3 id="0x05-利用多级域名绕过"><a href="#0x05-利用多级域名绕过" class="headerlink" title="0x05  利用多级域名绕过"></a>0x05  利用多级域名绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://bbb.com.baidu.com</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x06-利用数字地址来绕过"><a href="#0x06-利用数字地址来绕过" class="headerlink" title="0x06  利用数字地址来绕过"></a>0x06  利用数字地址来绕过</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">将ip转为数字地址，比如http:&#x2F;&#x2F;111.111.111.111--&gt;http:&#x2F;&#x2F;1869573999</span><br><span class="line">若url跳转白名单通过.来进行分割，我们就能用这种方式绕过</span><br><span class="line">http:&#x2F;&#x2F;www.bbb.com&#x2F;xxx.php?reidct&#x3D;http:&#x2F;&#x2F;1869573999&#x2F;www.bbb.com</span><br></pre></td></tr></table></figure>
+<h3 id="0x06-利用数字地址来绕过"><a href="#0x06-利用数字地址来绕过" class="headerlink" title="0x06  利用数字地址来绕过"></a>0x06  利用数字地址来绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">将ip转为数字地址，比如http://111.111.111.111--&gt;http://1869573999</span><br><span class="line">若url跳转白名单通过.来进行分割，我们就能用这种方式绕过</span><br><span class="line">http://www.bbb.com/xxx.php?reidct=http://1869573999/www.bbb.com</span><br></pre></td></tr></table></figure>
 
 <h3 id="0x07-白名单绕过"><a href="#0x07-白名单绕过" class="headerlink" title="0x07  白名单绕过"></a>0x07  白名单绕过</h3><p>利用百度等搜索引擎可以搜到你的域名，且百度域名是URL跳转白名单里的，那你就能借助百度的超链接域名来绕过跳转限制。</p>
 ]]></content>
@@ -38,7 +38,7 @@
 <span id="more"></span>
 
 <h3 id="reflector"><a href="#reflector" class="headerlink" title="reflector"></a>reflector</h3><p>一款自动检测xss漏洞的插件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;elkokc&#x2F;reflector</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">https://github.com/elkokc/reflector</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <tags>
@@ -53,7 +53,7 @@
 
 <h3 id="0x02-ssh免密登录"><a href="#0x02-ssh免密登录" class="headerlink" title="0x02  ssh免密登录"></a>0x02  ssh免密登录</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">//在windows的用户目录下创建.ssh文件夹</span><br><span class="line">mkdir ~/.ssh</span><br><span class="line">cd .ssh</span><br><span class="line">ssh-keygen -t rsa -C &quot;xxxx@qq.com&quot;,后面接3个回车</span><br><span class="line">//登录linux服务器</span><br><span class="line">mkdir ~/.ssh</span><br><span class="line">vi ~/.ssh/authorized_keys</span><br><span class="line">//.ssh目录下生成的id_rsa.pub文件发送到linux根目录</span><br><span class="line">cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br><span class="line">//删除服务器的id_rsa.pub</span><br><span class="line">rm ~/id_rsa.pub</span><br><span class="line">//重启ssh服务</span><br><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x03-配置ssh会话永不过期"><a href="#0x03-配置ssh会话永不过期" class="headerlink" title="0x03  配置ssh会话永不过期"></a>0x03  配置ssh会话永不过期</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;ssh&#x2F;sshd_config</span><br><span class="line">ClientAliveInterval 60</span><br><span class="line">ClientAliveCountMax 3</span><br><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-配置ssh会话永不过期"><a href="#0x03-配置ssh会话永不过期" class="headerlink" title="0x03  配置ssh会话永不过期"></a>0x03  配置ssh会话永不过期</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config</span><br><span class="line">ClientAliveInterval 60</span><br><span class="line">ClientAliveCountMax 3</span><br><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
 
 <h3 id="0x04-screen"><a href="#0x04-screen" class="headerlink" title="0x04  screen"></a>0x04  screen</h3><p>screen，这是一款ssh会话管理工具</p>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">//安装screen</span><br><span class="line">apt-get install screen</span><br><span class="line">//使用screen</span><br><span class="line">screen -S test          //创建一个名为test的session</span><br><span class="line">screen -ls              //列出当前所有的session</span><br><span class="line">screen -r test          //回到test的session</span><br><span class="line">screen -S test -X quit  //删除会话</span><br></pre></td></tr></table></figure>
@@ -76,10 +76,10 @@
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">/usr/bin/google-chrome</span><br></pre></td></tr></table></figure>
 
 <p>下载<a href="https://github.com/0Kee-Team/crawlergo">crawlergo</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">chmod +x crawlergo</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">chmod +x crawlergo</span><br></pre></td></tr></table></figure>
 
 <p>开始扫描</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">第一步：xray启动被动扫描状态</span><br><span class="line">.&#x2F;xray_linux_amd64 webscan --listen 127.0.0.1:7777 --html-output 1.html</span><br><span class="line">第二步：python3运行launcher.py</span><br><span class="line">&#x2F;&#x2F;debain系统默认安装了python3,但是没有安装pip，这里需要手动安装</span><br><span class="line">apt-get install python3-pip</span><br><span class="line">&#x2F;&#x2F;安装库</span><br><span class="line">pip3 install simplejson</span><br><span class="line">pip3 install requests</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">第一步：xray启动被动扫描状态</span><br><span class="line">./xray_linux_amd64 webscan --listen 127.0.0.1:7777 --html-output 1.html</span><br><span class="line">第二步：python3运行launcher.py</span><br><span class="line">//debain系统默认安装了python3,但是没有安装pip，这里需要手动安装</span><br><span class="line">apt-get install python3-pip</span><br><span class="line">//安装库</span><br><span class="line">pip3 install simplejson</span><br><span class="line">pip3 install requests</span><br></pre></td></tr></table></figure>
 
 <h3 id="0x07-安装python3-8"><a href="#0x07-安装python3-8" class="headerlink" title="0x07  安装python3.8"></a>0x07  安装python3.8</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">//卸载python3.7</span><br><span class="line">apt-get remove python3.7</span><br><span class="line">//卸载python3.7及其依赖</span><br><span class="line">apt-get remove --auto-remove python3.7</span><br><span class="line">//清除python3.7</span><br><span class="line">sudo apt-get purge python3.7</span><br><span class="line">//安装python3.8</span><br><span class="line">//安装构建Python源所需的包</span><br><span class="line">apt update sudo apt install build-essential zlib1g-dev libsqlite3-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget</span><br><span class="line">//使用curl命令从Python下载页面下载最新版本的源代码</span><br><span class="line">curl -O https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tgz</span><br><span class="line">//解压</span><br><span class="line">tar -xf Python-3.8.3.tgz</span><br><span class="line">//导航到Python源目录并运行configure脚本，该脚本将执行大量检查以确保系统上存在所有依赖项</span><br><span class="line">cd Python-3.8.3 ./configure --enable-optimizations</span><br><span class="line">//运行make以启动构建过程</span><br><span class="line">make -j 8</span><br><span class="line">//安装Python二进制文件</span><br><span class="line">make altinstall</span><br><span class="line">//修改python3.8为python3</span><br><span class="line">ln -s /usr/local/bin/python3.8 /usr/bin/python3</span><br><span class="line">//修改pip3.8为pip3</span><br><span class="line">ln -s /usr/local/bin/pip3.8 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
 
