@@ -6,7 +6,7 @@
   <link href="https://whmsec.github.io/atom.xml" rel="self"/>
   
   <link href="https://whmsec.github.io/"/>
-  <updated>2021-03-15T04:24:15.737Z</updated>
+  <updated>2021-03-15T04:27:14.811Z</updated>
   <id>https://whmsec.github.io/</id>
   
   <author>
@@ -17,41 +17,16 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>测试</title>
-    <link href="https://whmsec.github.io/2021/03/15/ceshi/"/>
-    <id>https://whmsec.github.io/2021/03/15/ceshi/</id>
+    <title>URL跳转绕过</title>
+    <link href="https://whmsec.github.io/2021/03/15/url%E8%B7%B3%E8%BD%AC%E7%BB%95%E8%BF%87/"/>
+    <id>https://whmsec.github.io/2021/03/15/url%E8%B7%B3%E8%BD%AC%E7%BB%95%E8%BF%87/</id>
     <published>2021-03-15T04:21:29.000Z</published>
-    <updated>2021-03-15T04:24:15.737Z</updated>
+    <updated>2021-03-15T04:27:14.811Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这里记录一下URL重定向绕过的方法</p><span id="more"></span><h3 id="0x02-利用问号绕过"><a href="#0x02-利用问号绕过" class="headerlink" title="0x02  利用问号绕过"></a>0x02  利用问号绕过</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.baidu.com/?www.bbb.com</span><br></pre></td></tr></table></figure><h3 id="0x03-利用-绕过"><a href="#0x03-利用-绕过" class="headerlink" title="0x03  利用@绕过"></a>0x03  利用@绕过</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.bbb.com@www.baidu.com</span><br></pre></td></tr></table></figure><h3 id="0x04-利用-号绕过"><a href="#0x04-利用-号绕过" class="headerlink" title="0x04  利用#号绕过"></a>0x04  利用#号绕过</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.baidu.com#www.bbb.com</span><br></pre></td></tr></table></figure><h3 id="0x05-利用多级域名绕过"><a href="#0x05-利用多级域名绕过" class="headerlink" title="0x05  利用多级域名绕过"></a>0x05  利用多级域名绕过</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://bbb.com.baidu.com</span><br></pre></td></tr></table></figure><h3 id="0x06-利用数字地址来绕过"><a href="#0x06-利用数字地址来绕过" class="headerlink" title="0x06  利用数字地址来绕过"></a>0x06  利用数字地址来绕过</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">将ip转为数字地址，比如http://111.111.111.111--&gt;http://1869573999</span><br><span class="line">若url跳转白名单通过.来进行分割，我们就能用这种方式绕过</span><br><span class="line">http://www.bbb.com/xxx.php?reidct=http://1869573999/www.bbb.com</span><br></pre></td></tr></table></figure><h3 id="0x07-白名单绕过"><a href="#0x07-白名单绕过" class="headerlink" title="0x07  白名单绕过"></a>0x07  白名单绕过</h3><p>利用百度等搜索引擎可以搜到你的域名，且百度域名是URL跳转白名单里的，那你就能借助百度的超链接域名来绕过跳转限制。</p>]]></content>
     
     
     <summary type="html">&lt;h3 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01  前言&quot;&gt;&lt;/a&gt;0x01  前言&lt;/h3&gt;&lt;p&gt;这里记录一下URL重定向绕过的方法&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="ceshi" scheme="https://whmsec.github.io/categories/ceshi/"/>
-    
-    
-    <category term="ceshi" scheme="https://whmsec.github.io/tags/ceshi/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>URL跳转绕过</title>
-    <link href="https://whmsec.github.io/2021/03/12/URL-Redict-Bypass/"/>
-    <id>https://whmsec.github.io/2021/03/12/URL-Redict-Bypass/</id>
-    <published>2021-03-12T09:11:19.000Z</published>
-    <updated>2021-03-15T04:24:28.852Z</updated>
-    
-    <content type="html"><![CDATA[<p>123</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;123&lt;/p&gt;
-</summary>
-      
     
     
     
