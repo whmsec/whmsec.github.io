@@ -27,26 +27,6 @@
       </tags>
   </entry>
   <entry>
-    <title>burpsuite实用插件推荐</title>
-    <url>/2021/03/11/Burpsuite-Plugins-Recommend/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>web渗透，burpsuite足矣</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<span id="more"></span>
-
-<h3 id="reflector"><a href="#reflector" class="headerlink" title="reflector"></a>reflector</h3><p>一款自动检测xss漏洞的插件</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">https://github.com/elkokc/reflector</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>burpsuite</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>谷歌云机器运维</title>
     <url>/2021/03/05/Google-Hey/</url>
     <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>每次白嫖谷歌云，都要重新部署服务器，此篇记录一下，日后好翻看。服务器是debain10。</p>
