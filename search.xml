@@ -3,7 +3,7 @@
   <entry>
     <title>Tr0ll1</title>
     <url>/2021/04/18/Tr0ll1/</url>
-    <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这是靶场挑战的第五篇，加油！</p>
+    <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这是靶场挑战的第五篇，加油！<span id="more"></span></p>
 <h3 id="0x02-信息收集"><a href="#0x02-信息收集" class="headerlink" title="0x02  信息收集"></a>0x02  信息收集</h3><p>arp-scan -l发现192.168.126.134主机存活，使用nmap扫一下端口</p>
 <p><img src="/2021/04/18/Tr0ll1/1.png"></p>
 <h3 id="0x03-FTP登录"><a href="#0x03-FTP登录" class="headerlink" title="0x03  FTP登录"></a>0x03  FTP登录</h3><p>扫描发现，目标开放了22,80和21端口，nmap提示ftp允许匿名登录,先看看ftp里有啥？使用anonymous账号登录，密码为空，成功登陆</p>
@@ -44,6 +44,12 @@
 
 <p>这种37292提权的方法，我们在GoldenEye靶场也遇到了。不过这个靶场很恶心，shell每两分钟就断一次。</p>
 ]]></content>
+      <categories>
+        <category>靶场</category>
+      </categories>
+      <tags>
+        <tag>vulnhub</tag>
+      </tags>
   </entry>
   <entry>
     <title>Raven2</title>
