@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>通过X-Forwarded-Host密码重置令牌泄露</title>
+      <link href="/2022/10/26/Bounty1/"/>
+      <url>/2022/10/26/Bounty1/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x01-前言">0x01 前言</h3><p>看到国外老哥挖洞思路挺骚的，这里记录一下。<a href="https://infosecwriteups.com/password-reset-token-leak-via-x-forwarded-host-4ed3e33dca31">原文连接</a></p><h3 id="0x02-详情">0x02 详情</h3><p>在某个网站上，发现密码重置功能</p><img src="/2022/10/26/Bounty1/image-20221026095909492.png" alt="image-20221026095909492" style="zoom:30%;"><p>通过抓包分析</p><img src="/2022/10/26/Bounty1/image-20221026100005603.png" alt="image-20221026100005603" style="zoom:50%;"><p>每当输入电子邮件并单击重置密码时，我们都会收到一封带有密码重置令牌链接更改密码的电子邮件</p><p>拦截密码重置请求，也启动了ngrok服务器</p><p>原始请求中用ngrok服务器域添加了另一个标头“X-Forwarded-Host”</p><img src="/2022/10/26/Bounty1/image-20221026100143927.png" alt="image-20221026100143927" style="zoom:50%;"><p>这次收到了一封更改密码的电子邮件，但使用ngrok服务器域。密码重置令牌链接如下所示：</p><blockquote><p><a href="https://95saf4ct71g.ngrok.io/action-token?key=wia2lkIiA6ICciOiJIUzI1NiIsInR5cCIgODU2ZeyJhbGiA">https://95saf4ct71g.ngrok.io/action-token?key=wia2lkIiA6ICciOiJIUzI1NiIsInR5cCIgODU2ZeyJhbGiA</a></p></blockquote><p>可以看到，我只需在密码重置请求中添加标题“X-Forwarded-Host”，即可成功更改主机</p><p>然后我注意到，如果我在密码重置页面中输入受害者的电子邮件，并拦截该请求，如果我在我的恶意域中添加另一个标题“X-Forwarded-Host”。然后，受害者将收到一封带有我的恶意域的密码重置令牌链接的电子邮件。当受害者点击该链接时，他将重定向到我的网站，他的所有令牌都会泄露给我。然后，我可以使用受害者泄露的令牌更改他的密码。是的，这个漏洞的影响是完全的帐户接管。</p><h3 id="0x03-实现">0x03 实现</h3><p>在服务器上安装nginx</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install nginx -y</span><br><span class="line">systemctl status nginx</span><br></pre></td></tr></table></figure><img src="/2022/10/26/Bounty1/image-20221026102257856.png" alt="image-20221026102257856" style="zoom:50%;"><p>Nginx配置文件存储在<code>/etc/nginx</code>目录中。</p><p>主要的Nginx配置文件为<code>/etc/nginx/nginx.conf</code></p><p>访问日志在：/var/log/nginx/access.log</p><img src="/2022/10/26/Bounty1/image-20221026102957878.png" alt="image-20221026102957878" style="zoom:50%;"><p>通过nginx的访问日志，获取重置密码的令牌</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 赏金 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 密码重置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Kerberos 域用户提权漏洞</title>
       <link href="/2022/10/25/Domain_User_Privilege_Escalation/"/>
       <url>/2022/10/25/Domain_User_Privilege_Escalation/</url>
@@ -13,7 +38,7 @@
       
       <categories>
           
-          <category> 内网安全 </category>
+          <category> 内网渗透 </category>
           
       </categories>
       
@@ -40,7 +65,7 @@
       
       <categories>
           
-          <category> 漏洞挖掘 </category>
+          <category> 赏金 </category>
           
       </categories>
       
@@ -50,6 +75,8 @@
             <tag> Sql注入 </tag>
             
             <tag> ffuf </tag>
+            
+            <tag> web安全 </tag>
             
         </tags>
       
@@ -67,7 +94,7 @@
       
       <categories>
           
-          <category> 漏洞挖掘 </category>
+          <category> 赏金 </category>
           
       </categories>
       
@@ -76,24 +103,7 @@
             
             <tag> 文件上传 </tag>
             
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>说说</title>
-      <link href="/2022/10/20/say/"/>
-      <url>/2022/10/20/say/</url>
-      
-        <content type="html"><![CDATA[<p>2022.10.21</p><ul><li>如果没有经济基础，打一个喷嚏，对于爱情来说，就是地震</li><li>know it and hack it</li></ul><p>2022.10.20</p><ul><li>没有得到，何必患得患失</li><li>与国内黑客同台竞技？与国际黑客同台竞技？</li></ul>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 说说 </tag>
+            <tag> web安全 </tag>
             
         </tags>
       
