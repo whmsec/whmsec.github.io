@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>利用psexec进行横向</title>
+      <link href="/2022/11/02/psexec/"/>
+      <url>/2022/11/02/psexec/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x00-前言">0x00 前言</h3><p><code>psexec</code> 是 windows 下非常好的一款远程命令行工具。<code>psexec</code>的使用不需要对方主机开方3389端口，只需要对方开启admin$共享 (该共享默认开启)。但是，假如目标主机开启了防火墙，<code>psexec</code>也是不能使用的，会提示找不到网络路径。由于<code>psexec</code>是Windows提供的工具，所以杀毒软件将其列在白名单中。</p><h3 id="0x01-psexec原理">0x01 psexec原理</h3><ul><li>通过<code>ipc$</code>连接<code>admin$</code>，释放二进制文件<code>psexecsvc.exe</code>到目标</li><li>通过服务管理<code>SCManager</code>远程创建一个<code>psexec</code>服务，并启动服务</li><li>客户端连接执行命令，服务端通过服务启动相应的程序执行命令并回显数据</li><li>运行结束后删除服务</li></ul><h3 id="0x02-使用前提">0x02 使用前提</h3><ul><li>对方主机开启了 <code>admin$</code>共享，如果关闭了<code>admin$</code>共享，会提示：找不到网络名</li><li>对方未开启防火墙</li><li>如果是工作组环境，则必须使用administrator用户连接（因为要在目标主机上面创建并启动服务），使用其他账号(包括管理员组中的非administrator用户)登录都会提示访问拒绝访问。</li><li>如果是域环境，即可用普通域用户连接也可以用域管理员用户连接。连接普通域主机可以用普通域用户，连接域控只能用域管理员账户</li></ul><h3 id="0x03-用法">0x03 用法</h3><ul><li>-accepteula：第一次运行psexec会弹出确认框，使用该参数就不会弹出确认框</li><li>-u：用户名</li><li>-p：密码</li><li>-s：以system权限运行运程进程，获得一个system权限的交互式shell。如果不使用该参数，会获得一个连接所用用户权限的shell</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PsExec64.exe -accepteula \\10.1.10.8 -u fzm\administrator -p abc12345. -s cmd.exe</span><br></pre></td></tr></table></figure><img src="/2022/11/02/psexec/image-20221102110825596.png" alt="image-20221102110825596" style="zoom:50%;"><p>这里也可以先建立ipc连接后直接调用<code>PsExec64.exe</code>调用cmd</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net use \\10.1.10.8\ipc$ abc12345. /user:&quot;fzm\administrator&quot;</span><br><span class="line"></span><br><span class="line">PsExec.exe -accepteula \\10.1.10.8 cmd.exe</span><br></pre></td></tr></table></figure><img src="/2022/11/02/psexec/image-20221102111223015.png" alt="image-20221102111223015" style="zoom:50%;"><img src="/2022/11/02/psexec/image-20221102111336406.png" alt="image-20221102111336406" style="zoom:50%;"><p>也可以直接执行命令(在建立ipc连接的基础上)</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PsExec.exe -accepteula \\10.1.10.8 ipconfig</span><br></pre></td></tr></table></figure><img src="/2022/11/02/psexec/image-20221102111530400.png" alt="image-20221102111530400" style="zoom:50%;">]]></content>
+      
+      
+      <categories>
+          
+          <category> 内网渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 横向移动 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>利用windows服务之SC进行横向</title>
       <link href="/2022/11/02/sc/"/>
       <url>/2022/11/02/sc/</url>
